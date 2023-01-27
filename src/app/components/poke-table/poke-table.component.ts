@@ -15,6 +15,7 @@ export class PokeTableComponent implements OnInit {
   data: any[] = [];
   dataSource = new MatTableDataSource<any>(this.data);
   pokemons = [];
+  positionTotal = 0;
 
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
@@ -35,6 +36,7 @@ export class PokeTableComponent implements OnInit {
             name: res.name
           };
           this.data.push(pokemonData);
+          this.positionTotal = i;
           this.dataSource = new MatTableDataSource<any>(this.data)
           this.dataSource.paginator = this.paginator;
       },

@@ -1,15 +1,20 @@
 @import "../../../assets/styles/style.scss";
 
-.container{
-    width: 100%;
+.card {
+    margin-left: 10%;
+    margin-right: 10%;
     margin-top: 20px;
+    background-image: linear-gradient(to bottom, #212121, #3d2b45, #6b2d5b, #a11f5e, #d3004b, #d3004b, #d3004b, #d3004b, #a11f5e, #6b2d5b, #3d2b45, #212121);
 }
 
-.card {
-    width: 450px;
-    margin: auto;
-    margin-top: 20px;
-    background-color: $red;
+img{
+    width: auto;
+}
+
+@media screen and (min-width: 10em) and (max-width: 40em) {
+	img {
+        width: 50%;
+	}
 }
 
 .mat-card-header{
@@ -17,9 +22,11 @@
     padding-top: 10px;
     border-radius: 50px;
     justify-content: center;
+    
 }
 
 .mat-card-title{
     text-transform: uppercase;
     color: $black;
 }
+

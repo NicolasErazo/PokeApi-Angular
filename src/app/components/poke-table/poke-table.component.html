@@ -1,11 +1,11 @@
-<div class="container py-2">
+<div class="container py-4">
 
     <mat-form-field class="mat-form-field">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" #input>
     </mat-form-field>
 
-    <table mat-table [dataSource]="dataSource" *ngIf="positionTotal == 891; else noData">
+    <table mat-table [dataSource]="dataSource" *ngIf="positionTotal >= 500; else noData">
 
         <ng-container matColumnDef="position">
             <th class="mat-header-cell" mat-header-cell *matHeaderCellDef> No. </th>

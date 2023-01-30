@@ -6,14 +6,22 @@
         <br><br>
       </mat-card-header>
     </div>
-  
-      <img mat-card-image src="{{pokemonImg}}" alt="pokemon">
-  
+
+      <div class="row text-center mb-4">
+        <div class="col-md-6">
+          <img mat-card-image src="{{pokemonImgFront}}" alt="pokemon">
+        </div>
+        <div class="col-md-6">
+          <img mat-card-image src="{{pokemonImgShiny}}" alt="pokemon">
+        </div>
+      </div>
+
+
     <div class="card-footer text-muted d-flex justify-content-center">
       <mat-chip-listbox>
-        <mat-chip color="primary">Type: {{pokemonType}}</mat-chip>
-        <mat-chip color="primary">Height: {{pokemon.height}}</mat-chip>
-        <mat-chip color="primary">Weight: {{pokemon.weight}}</mat-chip>
+        <mat-chip color="primary" style="font-size: large;" >Type: {{pokemonType}}</mat-chip>
+        <mat-chip color="primary" style="font-size: large;">Height: {{pokemon.height}}</mat-chip>
+        <mat-chip color="primary" style="font-size: large;">Weight: {{pokemon.weight}}</mat-chip>
       </mat-chip-listbox>
     </div>
 

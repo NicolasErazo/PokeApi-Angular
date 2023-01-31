@@ -15,7 +15,7 @@
         <ng-container matColumnDef="image">
             <th class="mat-header-cell" mat-header-cell *matHeaderCellDef> Image </th>
             <td class="mat-cell" mat-cell *matCellDef="let element">
-                <img src="{{element.image}}" alt="pokemon" width="100" height="100">
+                <img [ngSrc]="element.image" alt="pokemon" width="100" height="100">
             </td>
         </ng-container>
 

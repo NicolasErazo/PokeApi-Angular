@@ -18,9 +18,10 @@
 
     <div class="card-footer text-muted d-flex justify-content-center">
       <mat-chip-listbox>
-        <mat-chip color="primary" style="font-size: large;" >Type: <strong>{{pokemonType[0] | titlecase }}{{pokemonType.slice(1)}}</strong></mat-chip>
-        <mat-chip color="primary" style="font-size: large;">Height: <strong>{{pokemon.height}}</strong></mat-chip>
-        <mat-chip color="primary" style="font-size: large;">Weight: <strong>{{pokemon.weight}}</strong></mat-chip>
+        <mat-chip color="primary" style="font-size: medium;" >Type: <strong>{{pokemonType[0] | titlecase }}{{pokemonType.slice(1)}}</strong></mat-chip>
+        <mat-chip color="primary" style="font-size: medium;">Height: <strong>{{pokemon.height}}</strong></mat-chip>
+        <mat-chip color="primary" style="font-size: medium;">Weight: <strong>{{pokemon.weight}}</strong></mat-chip>
+        <mat-chip color="primary" style="font-size: medium;">Experience: <strong>{{pokemon.base_experience}}</strong></mat-chip>
       </mat-chip-listbox>
     </div>
 

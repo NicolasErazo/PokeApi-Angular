@@ -30,3 +30,6 @@ img{
     color: $black;
 }
 
+.strong:first-letter {
+    text-transform: uppercase;
+}

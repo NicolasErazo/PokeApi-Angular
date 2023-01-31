@@ -8,7 +8,7 @@
     <table mat-table matSort [dataSource]="dataSource">
 
         <ng-container matColumnDef="position">
-            <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+            <th class="mat-header-cell mat-sort-header" mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
             <td class="mat-cell" mat-cell *matCellDef="let element"> {{element.position}} </td>
         </ng-container>
 

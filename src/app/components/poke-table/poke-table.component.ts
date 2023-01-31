@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort, MatSortable, Sort, SortDirection } from '@angular/material/sort';
+import { MatSort, Sort} from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { PokemonService } from 'src/app/services/pokemon.service';
 

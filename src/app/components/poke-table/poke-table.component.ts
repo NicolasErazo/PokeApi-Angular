@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortable, Sort, SortDirection } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { PokemonService } from 'src/app/services/pokemon.service';
 
@@ -41,7 +41,12 @@ export class PokeTableComponent implements OnInit {
           this.positionTotal = i;
           this.dataSource = new MatTableDataSource<any>(this.data)
           this.dataSource.paginator = this.paginator;
+          //ORDEN ASCENDENTE
           this.dataSource.sort = this.sort;
+          const sortState: Sort = {active: 'position', direction: 'asc'};
+          this.sort.active = sortState.active;
+          this.sort.direction = sortState.direction;
+          this.sort.sortChange.emit(sortState);
       },
       err=>{
         console.log(err);

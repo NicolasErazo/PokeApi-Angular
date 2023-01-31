@@ -9,6 +9,13 @@
     background-image: linear-gradient(to bottom, #212121, #3d2b45, #6b2d5b, #a11f5e, #d3004b, #d3004b, #d3004b, #d3004b, #a11f5e, #6b2d5b, #3d2b45, #212121);
 }
 
+@media screen and (min-width: 10em) and (max-width: 40em) {
+	.container {
+        margin-right: 0;
+        margin-left: 0;
+	}
+}
+
 table {
     min-width: 80%;
     margin: auto;

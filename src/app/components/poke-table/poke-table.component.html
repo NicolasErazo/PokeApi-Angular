@@ -5,10 +5,10 @@
         <input matInput (keyup)="applyFilter($event)" #input>
     </mat-form-field>
 
-    <table mat-table [dataSource]="dataSource" *ngIf="positionTotal >= 500; else noData">
+    <table mat-table matSort [dataSource]="dataSource" *ngIf="positionTotal >= 500; else noData">
 
         <ng-container matColumnDef="position">
-            <th class="mat-header-cell" mat-header-cell *matHeaderCellDef> No. </th>
+            <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
             <td class="mat-cell" mat-cell *matCellDef="let element"> {{element.position}} </td>
         </ng-container>
 
@@ -20,7 +20,7 @@
         </ng-container>
 
         <ng-container matColumnDef="name">
-            <th class="mat-header-cell" mat-header-cell *matHeaderCellDef> Name </th>
+            <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
             <td class="mat-cell" mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 

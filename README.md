@@ -4,10 +4,10 @@
 
 This project is a Pokémon-themed website created with Angular.js and the PokeAPI API.
 
-<img src="https://img.shields.io/github/stars/jaenfigueroa/PokeZone">
-<img src="https://img.shields.io/github/forks/jaenfigueroa/PokeZone">
-<img src="https://img.shields.io/github/issues-pr/jaenfigueroa/PokeZone">
-<img src="https://img.shields.io/github/issues/jaenfigueroa/PokeZone">
+<img src="https://img.shields.io/github/stars/NicolasErazo/PokeApi-Angular">
+<img src="https://img.shields.io/github/forks/NicolasErazo/PokeApi-Angular">
+<img src="https://img.shields.io/github/issues-pr/NicolasErazo/PokeApi-Angular">
+<img src="https://img.shields.io/github/issues/NicolasErazo/PokeApi-Angular">
 
 </div>
 

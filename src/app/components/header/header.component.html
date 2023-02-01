@@ -1,7 +1,9 @@
 <mat-toolbar>
   <mat-toolbar-row>
-    <img src="../../../assets/images/poxedex.png" alt="pokedex" width="40" height="40" (click)="home()" title="Home">
-    <span>PokeApi</span>
+    <div (click)="home()">
+      <img src="../../../assets/images/poxedex.png" alt="pokedex" width="40" height="40" title="Home">
+      PokeApi
+    </div>
     &nbsp;&nbsp;
     <button class="btn btn-outline-light" (click)="generateRandomNumber()">¿Pokemon?</button>
   </mat-toolbar-row>

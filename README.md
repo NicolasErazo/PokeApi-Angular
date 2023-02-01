@@ -36,7 +36,7 @@ Users can:
 - Colors
   - Yellow: #FFD924;
   - White: #fcfcfc;
-  - Black: black;
+  - Black: #212121;
   - Red: #bd3736;
 
 ## 📥 Installation and configuration

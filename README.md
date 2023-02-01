@@ -26,7 +26,7 @@ Users can:
 
 - Search for a Pokémon by name and get suggestions based on the matches.
 - Navigate through a list of over 800 Pokémon cards, divided into pages, each card showing the name, ID, and types of the Pokémon.
-- View detailed information about the Pokémon by clicking on a card, divided into 2 sections:
+- View detailed information about the Pokémon by clicking on a card, divided into sections:
   - General: Name, Image - Pokemon, Experience, Height, Type and Weight.
 
 ## 🛠 Technologies and frameworks

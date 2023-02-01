@@ -11,9 +11,14 @@
         <div class="col-md-6">
           <img mat-card-image src="{{pokemonImgFront}}" alt="pokemon">
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" *ngIf="pokemonImgShiny; else elseImg">
           <img mat-card-image src="{{pokemonImgShiny}}" alt="pokemon">
         </div>
+        <ng-template #elseImg>
+          <div class="col-md-6">
+            <img mat-card-image src="../../../assets/images/Unavailable.png" style="width: 80%;" alt="pokemon">
+          </div>
+        </ng-template>
       </div>
 
     <div class="card-footer text-muted d-flex justify-content-center">

@@ -62,5 +62,5 @@ You can try and interact with the website [here](https://pokeapi-bb219.web.app/h
 
 ## 👥 Contact
 
-- Email: nico.lacho@outlook.com.com
+- Email: nico.lacho@outlook.com
 - Whatsapp: +57 3193648237

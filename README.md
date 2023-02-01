@@ -1,4 +1,4 @@
-<div class='text-center'>
+<div align="center">
 
 # PokeZone
 

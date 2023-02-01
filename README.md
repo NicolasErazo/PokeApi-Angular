@@ -22,7 +22,7 @@ This project is a Pokémon-themed website created with Angular.js and the PokeAP
 
 Users can:
 
-<img src="https://octodex.github.com/images/inspectocat.jpg" style="width: 25%" align="right">
+<img src="https://octodex.github.com/nuxtocat/" style="width: 25%" align="right">
 
 - Search for a Pokémon by name and get suggestions based on the matches.
 - Navigate through a list of over 800 Pokémon cards, divided into pages, each card showing the name, ID, and types of the Pokémon.

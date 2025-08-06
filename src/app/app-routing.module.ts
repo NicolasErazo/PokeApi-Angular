@@ -1,13 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PokeDetailComponent } from './components/poke-detail/poke-detail.component';
-import { PokeTableComponent } from './components/poke-table/poke-table.component';
 
 const routes: Routes = [
-  {path: 'home', component: PokeTableComponent},
-  {path: 'pokeDetail/:id', component: PokeDetailComponent},
-  {path: '', pathMatch: 'full',redirectTo: 'home'},
-  {path: '**', pathMatch: 'full',redirectTo: 'home'}
+  {
+    path: '',
+    redirectTo: '/pokemones',
+    pathMatch: 'full'
+  },
+  {
+    path: 'pokemones',
+    loadChildren: () => import('./features/pokemon-list/pokemon-list.module').then(m => m.PokemonListModule)
+  },
+  {
+    path: 'pokemon/:id',
+    loadChildren: () => import('./features/pokemon-detail/pokemon-detail.module').then(m => m.PokemonDetailModule)
+  }
 ];
 
 @NgModule({

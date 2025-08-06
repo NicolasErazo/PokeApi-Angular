@@ -10,23 +10,21 @@ export class HeaderComponent {
 
   randomNumber: number = 0;
 
-  constructor(private router: Router){
+  constructor(private router: Router) {
 
   }
 
-  home(){
-    this.router.navigateByUrl('/home');
+  home() {
+    this.router.navigateByUrl('/');
   }
 
   generateRandomNumber() {
-    // Genera un número aleatorio entre 0 y 100
-    this.randomNumber = Math.round(Math.random() * 891);
+    // Genera un número aleatorio entre 0 y 891 (número máximo de Pokémons de la PokeAPI)
+    this.randomNumber = Math.floor(Math.random() * 892); // 0 - 891
 
-    // Asigna el número aleatorio al input
     console.log(this.randomNumber);
 
-    this.router.navigateByUrl('pokeDetail/'+this.randomNumber)
-    
+    // Navega a la ruta correcta
+    this.router.navigate(['/pokemon', this.randomNumber]);
   }
-
 }

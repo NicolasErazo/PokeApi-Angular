@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PokeDetailComponent } from './poke-detail.component';
+import { PokeDetailComponent } from '../../poke-detail.component';
 
 describe('PokeDetailComponent', () => {
   let component: PokeDetailComponent;
@@ -8,9 +8,9 @@ describe('PokeDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PokeDetailComponent ]
+      declarations: [PokeDetailComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(PokeDetailComponent);
     component = fixture.componentInstance;

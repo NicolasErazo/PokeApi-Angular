@@ -1,33 +1,32 @@
 <mat-card class="card">
 
-    <div class="card-header mat-card-title">
-      <mat-card-header class="mat-card-header">
-        <mat-card-title class="mat-card-title">{{pokemon.name}}</mat-card-title>
-        <br><br>
-      </mat-card-header>
-    </div>
+  <div class="card-header mat-card-title">
+    <mat-card-header class="mat-card-header">
+      <mat-card-title class="mat-card-title">{{pokemon.name}}</mat-card-title>
+      <br><br>
+    </mat-card-header>
+  </div>
 
-      <div class="row text-center mb-4">
-        <div class="col-md-6">
-          <img mat-card-image src="{{pokemonImgFront}}" alt="pokemon">
-        </div>
-        <div class="col-md-6" *ngIf="pokemonImgShiny; else elseImg">
-          <img mat-card-image src="{{pokemonImgShiny}}" alt="pokemon">
-        </div>
-        <ng-template #elseImg>
-          <div class="col-md-6">
-            <img mat-card-image src="../../../assets/images/Unavailable.png" style="width: 80%;" alt="pokemon">
-          </div>
-        </ng-template>
+  <div class="row text-center mb-4">
+    <div class="col-md-6">
+      <img mat-card-image src="{{pokemonImgFront}}" alt="pokemon">
+    </div>
+    <div class="col-md-6" *ngIf="pokemonImgShiny; else elseImg">
+      <img mat-card-image src="{{pokemonImgShiny}}" alt="pokemon">
+    </div>
+    <ng-template #elseImg>
+      <div class="col-md-6">
+        <img mat-card-image src="../../../assets/images/Unavailable.png" style="width: 80%;" alt="pokemon">
       </div>
+    </ng-template>
+  </div>
 
-    <div class="card-footer text-muted d-flex justify-content-center">
-      <mat-chip-listbox>
-        <mat-chip color="primary" style="font-size: medium;">XP: <strong>{{pokemon.base_experience}}</strong></mat-chip>
-        <mat-chip color="primary" style="font-size: medium;">Height: <strong>{{pokemon.height / 10}} m </strong></mat-chip>
-        <mat-chip color="primary" style="font-size: medium;" >Type: <strong>{{pokemonType[0] | titlecase }}{{pokemonType.slice(1)}}</strong></mat-chip>
-        <mat-chip color="primary" style="font-size: medium;">Weight: <strong>{{pokemon.weight / 10}} Kg</strong></mat-chip>
-      </mat-chip-listbox>
-    </div>
+  <div class="card-footer text-muted d-flex justify-content-center">
+    <mat-chip-listbox>
+      <mat-chip *ngFor="let t of pokemon.types" color="primary">
+        {{ t.type.name | titlecase }}
+      </mat-chip>
+    </mat-chip-listbox>
+  </div>
 
 </mat-card>

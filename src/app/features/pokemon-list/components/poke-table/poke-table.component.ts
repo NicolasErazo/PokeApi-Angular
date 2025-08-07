@@ -16,7 +16,7 @@ import { NamedAPIResource } from 'src/app/core/services/interfaces/api-response.
     styleUrls: ['./poke-table.component.scss']
 })
 export class PokeTableComponent implements OnInit {
-    displayedColumns: string[] = ['id', 'name', 'types', 'weight', 'height', 'actions'];
+    displayedColumns: string[] = ['position', 'image', 'name'];
     dataSource = new MatTableDataSource<PokemonTableRow>([]);
 
     positionTotal = 0;
@@ -114,13 +114,17 @@ export class PokeTableComponent implements OnInit {
     mapToTableRow(pokemon: Pokemon): PokemonTableRow {
         return {
             position: pokemon.id,
-            name: pokemon.name,
+            name: this.capitalizeFirstLetter(pokemon.name),
             image: pokemon.sprites.front_default || ''
         };
     }
 
     getRow(row: PokemonTableRow): void {
         this.router.navigateByUrl(`/pokemon/${row.position}`);
+    }
+
+    capitalizeFirstLetter(text: string): string {
+        return text.charAt(0).toUpperCase() + text.slice(1);
     }
 }
 

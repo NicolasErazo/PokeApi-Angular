@@ -22,11 +22,9 @@
   </div>
 
   <div class="card-footer text-muted d-flex justify-content-center">
-    <mat-chip-listbox>
-      <mat-chip *ngFor="let t of pokemon.types" color="primary">
-        {{ t.type.name | titlecase }}
-      </mat-chip>
-    </mat-chip-listbox>
+    <mat-chip-list>
+      <mat-chip *ngFor="let t of pokemon.types" [ngClass]="t.type.name">{{ t.type.name | titlecase }}</mat-chip>
+    </mat-chip-list>
   </div>
 
 </mat-card>

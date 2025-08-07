@@ -30,7 +30,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatSortModule,
     MatOptionModule,
     MatAutocompleteModule
-
   ],
   exports: [
     MatButtonModule,

@@ -1,13 +1,10 @@
-// ✅ 1. forkJoin para cargar Pokémon eficientemente
-
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { forkJoin } from 'rxjs';
-
 @Component({
   selector: 'app-poke-table',
   templateUrl: './poke-table.component.html',
@@ -18,6 +15,9 @@ export class PokeTableComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   positionTotal = 0;
 
+  pageSize = 5;
+  currentPage = 0;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -27,8 +27,10 @@ export class PokeTableComponent implements OnInit {
     this.loadPokemons();
   }
 
-  loadPokemons(offset: number = 0, limit: number = 20): void {
-    this.pokeService.getPokemonPage(limit, offset).subscribe({
+  loadPokemons(): void {
+    const offset = this.currentPage * this.pageSize;
+
+    this.pokeService.getPokemonPage(this.pageSize, offset).subscribe({
       next: (response) => {
         const requests = response.results.map((pokemon: any) =>
           this.pokeService.getPokemonByUrl(pokemon.url)
@@ -43,18 +45,47 @@ export class PokeTableComponent implements OnInit {
 
           this.dataSource.data = pokemons;
           this.positionTotal = response.count;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
         });
       },
       error: (err) => console.error('Error loading Pokémon page', err)
     });
   }
 
+  onPageChange(event: PageEvent): void {
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.loadPokemons();
+  }
+
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
-    if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
+
+    if (!filterValue) return;
+
+    // Si es un número, buscar por ID
+    const id = parseInt(filterValue, 10);
+    if (!isNaN(id)) {
+      this.pokeService.getPokemonById(id).subscribe(pokemon => {
+        this.dataSource.data = [this.mapToTableRow(pokemon)];
+      }, () => {
+        this.dataSource.data = [];
+      });
+    } else {
+      // Si es texto, buscar por nombre
+      this.pokeService.getPokemonByName(filterValue).subscribe(pokemon => {
+        this.dataSource.data = [this.mapToTableRow(pokemon)];
+      }, () => {
+        this.dataSource.data = [];
+      });
+    }
+  }
+
+  mapToTableRow(pokemon: any) {
+    return {
+      position: pokemon.id,
+      name: pokemon.name,
+      image: pokemon.sprites.front_default,
+    };
   }
 
   getRow(row: any): void {

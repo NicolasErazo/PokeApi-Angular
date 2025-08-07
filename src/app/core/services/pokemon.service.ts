@@ -24,4 +24,12 @@ export class PokemonService {
     return this.http.get<any>(url);
   }
 
+  getPokemonById(id: number): Observable<Pokemon> {
+    return this.http.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`);
+  }
+
+  getPokemonByName(name: string): Observable<Pokemon> {
+    return this.http.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  }
+
 }

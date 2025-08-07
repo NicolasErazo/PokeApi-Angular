@@ -123,3 +123,12 @@ table {
 input {
   color: $black !important;
 }
+
+tr[role="button"] {
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}

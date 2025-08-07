@@ -1,6 +1,7 @@
 import { NamedAPIResource } from "src/app/core/services/interfaces/api-response.interface";
 
 export interface Pokemon {
+    url(url: any): unknown;
     id: number;
     name: string;
     base_experience: number;

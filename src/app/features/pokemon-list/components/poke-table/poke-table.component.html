@@ -1,40 +1,50 @@
 <div class="container py-4">
 
-    <mat-form-field class="mat-form-field">
-        <mat-label>Filter</mat-label>
-        <input matInput #input>
+    <!-- Filtro -->
+    <mat-form-field appearance="outline" class="w-100 mb-4">
+        <mat-label>Filtrar Pokémon</mat-label>
+        <input matInput #input (keyup)="applyFilter($event)" placeholder="Ej: pikachu o 25">
     </mat-form-field>
 
-    <table mat-table matSort [dataSource]="dataSource">
+    <!-- Tabla -->
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 w-100">
 
+        <!-- Posición -->
         <ng-container matColumnDef="position">
-            <th class="mat-header-cell mat-sort-header" mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-            <td class="mat-cell" mat-cell *matCellDef="let element"> {{element.position}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+            <td mat-cell *matCellDef="let element">{{ element.position }}</td>
         </ng-container>
 
+        <!-- Imagen -->
         <ng-container matColumnDef="image">
-            <th class="mat-header-cell" mat-header-cell *matHeaderCellDef> Image </th>
-            <td class="mat-cell" mat-cell *matCellDef="let element">
-                <img src="{{element.image}}" alt="{{element.name}}" width="100" height="100">
-                <!-- Si usas ngSrc, asegúrate de importar NgOptimizedImage en tu módulo -->
+            <th mat-header-cell *matHeaderCellDef>Imagen</th>
+            <td mat-cell *matCellDef="let element">
+                <img [src]="element.image" [alt]="element.name" width="64" height="64" class="poke-img" />
             </td>
         </ng-container>
 
+        <!-- Nombre -->
         <ng-container matColumnDef="name">
-            <th class="mat-header-cell" mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-            <td class="mat-cell" mat-cell *matCellDef="let element"> {{element.name}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
         </ng-container>
 
-        <tr class="mat-header-row" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <!-- Cabecera y filas -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="getRow(row)" (keydown.enter)="getRow(row)"
+            (keydown.space)="getRow(row)" tabindex="0" role="button" [attr.aria-label]="'Ver detalles de ' + row.name">
+        </tr>
 
-        <tr class="mat-row" mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getRow(row)"
-            (keydown.enter)="getRow(row)" (keydown.space)="getRow(row)" tabindex="0" role="button"></tr>
-
-        <tr class="mat-row" mat-row *matNoDataRow>
-            <td class="mat-cell" mat-cell colspan="4">No data matching the filter "{{input.value}}"</td>
+        <!-- Fila sin datos -->
+        <tr class="mat-row" *matNoDataRow>
+            <td mat-cell colspan="3">No hay coincidencias para "{{ input.value }}"</td>
         </tr>
 
     </table>
 
-    <mat-paginator class="mat-paginator" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <!-- Paginador -->
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50]" [length]="positionTotal"
+        showFirstLastButtons (page)="onPageChange($event)" aria-label="Selector de página">
+    </mat-paginator>
+
 </div>

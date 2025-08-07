@@ -4,8 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { PokemonListRoutingModule } from './pokemon-list-routing.module';
 
-import { MaterialModule } from 'src/app/shared/material.module';
 import { PokeTableComponent } from './components/poke-table/poke-table.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -14,7 +14,7 @@ import { PokeTableComponent } from './components/poke-table/poke-table.component
     imports: [
         CommonModule,
         PokemonListRoutingModule,
-        MaterialModule,
+        SharedModule,
         ReactiveFormsModule
     ]
 })

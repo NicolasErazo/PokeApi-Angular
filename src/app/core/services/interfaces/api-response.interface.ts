@@ -56,4 +56,3 @@ export interface PaginatedResponse<T> {
     results: T[];
 }
 
-export interface PokemonListResponse extends PaginatedResponse<NamedAPIResource> { }

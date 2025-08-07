@@ -1,9 +1,10 @@
 @import "src/assets/styles/style.scss";
 
+// ========= CARD =========
 .card {
-  margin-left: 10%;
-  margin-right: 10%;
-  margin-top: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 1rem;
   background-image: linear-gradient(
     to bottom,
     #212121,
@@ -19,30 +20,69 @@
     #3d2b45,
     #212121
   );
+  border-radius: 10px;
 }
 
+// ========= IMAGE =========
 img {
-  width: auto;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
-@media screen and (min-width: 10em) and (max-width: 40em) {
-  img {
-    width: 50%;
-  }
-}
-
+// ========= CARD HEADER =========
 .mat-card-header {
   background-color: $white;
-  padding-top: 10px;
+  padding: 10px 20px;
   border-radius: 50px;
+  display: flex;
   justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: center;
 }
 
+// ========= CARD TITLE =========
 .mat-card-title {
   text-transform: uppercase;
   color: $black;
+  font-size: 1.5rem;
 }
 
+// ========= UTILITY CLASSES =========
 .mayuscula ::first-letter {
   text-transform: uppercase;
+}
+
+// ========= RESPONSIVE BREAKPOINTS =========
+
+// == Tablets y abajo ==
+@media (max-width: 1024px) {
+  .card {
+    padding: 1rem;
+  }
+
+  .mat-card-title {
+    font-size: 1.3rem;
+  }
+
+  img {
+    max-width: 80%;
+  }
+}
+
+// == Móviles ==
+@media (max-width: 768px) {
+  .card {
+    padding: 0.75rem;
+  }
+
+  .mat-card-title {
+    font-size: 1.1rem;
+  }
+
+  img {
+    max-width: 100%;
+  }
 }

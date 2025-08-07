@@ -1,10 +1,13 @@
 @import "src/assets/styles/style.scss";
 
+// =======================================
+// CONTAINER
+// =======================================
+
 .container {
-  width: 100%;
-  margin-left: 10%;
-  margin-right: 10%;
-  margin-top: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 1rem;
   text-align: center;
   background-image: linear-gradient(
     to bottom,
@@ -23,12 +26,18 @@
   );
 }
 
-@media screen and (min-width: 10em) and (max-width: 40em) {
-  .container {
-    margin-right: 0;
-    margin-left: 0;
-  }
+// =======================================
+// TABLE WRAPPER (scroll en móvil)
+// =======================================
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
+
+// =======================================
+// TABLE
+// =======================================
 
 table {
   min-width: 80%;
@@ -36,37 +45,34 @@ table {
   text-align: center;
 }
 
-@media screen and (min-width: 10em) and (max-width: 30em) {
-  table {
-    width: 94.1%;
-    margin: auto;
-  }
-}
-
 :host ::ng-deep .mat-sort-header-container {
   display: flex;
   justify-content: center;
 }
 
-.mdc-data-table__cell {
+.mdc-data-table__cell,
+.mat-header-cell {
   text-align: center;
 }
 
 .mat-header-cell {
   color: black;
   font-weight: bold;
-  text-align: center;
-  font-size: 15px;
+  font-size: 1rem;
 }
 
-//even
-//Representa elementos cuya posición numérica en una serie de hermanos es par: 2, 4, 6, etc.
+.mat-cell:first-letter {
+  text-transform: uppercase;
+}
+
+// =======================================
+// TABLE ROWS
+// =======================================
+
 .mat-row:nth-child(even) {
   background-color: $white;
 }
 
-//odd
-//Representa elementos cuya posición numérica en una serie de hermanos es impar: 1, 3, 5, etc.
 .mat-row:nth-child(odd) {
   background-color: $red;
 
@@ -75,54 +81,14 @@ table {
   }
 }
 
-.mat-cell:first-letter {
-  text-transform: uppercase;
-}
-
 .mat-row:hover {
   cursor: pointer;
   box-shadow: inset 0 -3em 3em $black, 0 0 0 2px $black, 0.3em 0.3em 1em $black;
 }
 
-::ng-deep.mat-paginator {
-  width: 80%;
-  margin: auto;
-}
-
-@media screen and (min-width: 10em) and (max-width: 30em) {
-  .mat-paginator {
-    width: 94.1%;
-    margin: auto;
-  }
-}
-
-.mat-form-field {
-  font-size: 20px;
-  width: 30%;
-  margin-bottom: 5px;
-  padding: 10px;
-}
-
-@media screen and (min-width: 10em) and (max-width: 30em) {
-  .mat-form-field {
-    font-size: 20px;
-    width: 50%;
-    margin-bottom: 5px;
-    padding: 10px;
-  }
-}
-
-::ng-deep.mat-form-field-label {
-  color: $white !important;
-}
-
-::ng-deep.mat-form-field-underline {
-  background-color: $white !important;
-}
-
-input {
-  color: $black !important;
-}
+// =======================================
+// TABLE ROWS AS BUTTONS
+// =======================================
 
 tr[role="button"] {
   cursor: pointer;
@@ -130,5 +96,111 @@ tr[role="button"] {
 
   &:hover {
     background-color: #f5f5f5;
+  }
+}
+
+// =======================================
+// PAGINATOR
+// =======================================
+
+::ng-deep.mat-paginator {
+  width: 80%;
+  margin: auto;
+}
+
+// =======================================
+// FORM FIELD / AUTOCOMPLETE
+// =======================================
+
+.mat-autocomplete {
+  font-size: 1.25rem;
+  width: 30%;
+  margin-bottom: 5px;
+  padding: 10px;
+}
+
+::ng-deep.mat-autocomplete-label {
+  color: $white !important;
+}
+
+::ng-deep.mat-autocomplete-underline {
+  background-color: $white !important;
+}
+
+input {
+  color: $black !important;
+}
+
+// Autocomplete dropdown panel
+::ng-deep .mat-autocomplete-panel {
+  background-color: $white;
+  color: $black;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+::ng-deep .mat-option {
+  font-size: 1rem;
+  padding: 10px 16px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+::ng-deep .mat-option:hover,
+::ng-deep .mat-option.mat-active {
+  background-color: $red;
+  color: $white;
+}
+
+// =======================================
+// RESPONSIVE BREAKPOINTS
+// =======================================
+
+// Tablets y abajo
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  .mat-form-field {
+    width: 50%;
+    font-size: 1.1rem;
+  }
+
+  ::ng-deep.mat-paginator {
+    width: 94%;
+  }
+}
+
+// Móviles
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 600px;
+  }
+
+  .mat-form-field {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  ::ng-deep.mat-paginator {
+    width: 100%;
+  }
+
+  .mat-row:hover {
+    box-shadow: none;
   }
 }

@@ -1,94 +1,131 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, debounceTime, Observable } from 'rxjs';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { Pokemon } from 'src/app/features/pokemon/interfaces';
+import { NamedAPIResource } from 'src/app/core/services/interfaces/api-response.interface';
+
 @Component({
-  selector: 'app-poke-table',
-  templateUrl: './poke-table.component.html',
-  styleUrls: ['./poke-table.component.scss']
+    selector: 'app-poke-table',
+    templateUrl: './poke-table.component.html',
+    styleUrls: ['./poke-table.component.scss']
 })
 export class PokeTableComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'image', 'name'];
-  dataSource = new MatTableDataSource<any>([]);
-  positionTotal = 0;
+    displayedColumns: string[] = ['id', 'name', 'types', 'weight', 'height', 'actions'];
+    dataSource = new MatTableDataSource<PokemonTableRow>([]);
 
-  pageSize = 5;
-  currentPage = 0;
+    positionTotal = 0;
+    pageSize = 5;
+    currentPage = 0;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+    pokemonCtrl = new FormControl();
+    allPokemonNames: string[] = [];
+    filteredPokemonNames: string[] = [];
 
-  constructor(private pokeService: PokemonService, private router: Router) { }
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatSort) sort!: MatSort;
 
-  ngOnInit(): void {
-    this.loadPokemons();
-  }
+    pokeService = inject(PokemonService);
+    router = inject(Router);
 
-  loadPokemons(): void {
-    const offset = this.currentPage * this.pageSize;
+    ngOnInit(): void {
+        this.loadPokemons();
+        this.loadAllPokemonNames();
 
-    this.pokeService.getPokemonPage(this.pageSize, offset).subscribe({
-      next: (response) => {
-        const requests = response.results.map((pokemon: any) =>
-          this.pokeService.getPokemonByUrl(pokemon.url)
-        );
+        this.pokemonCtrl.valueChanges.pipe(
+            debounceTime(300)
+        ).subscribe(value => {
+            const val = (value || '').toString().trim().toLowerCase();
 
-        forkJoin<any[]>(requests).subscribe((results) => {
-          const pokemons = results.map((res) => ({
-            position: res.id,
-            image: res.sprites?.other?.home?.front_default || '',
-            name: res.name
-          }));
+            if (!val) {
+                this.loadPokemons();
+                return;
+            }
 
-          this.dataSource.data = pokemons;
-          this.positionTotal = response.count;
+            const id = parseInt(val, 10);
+            if (!isNaN(id)) {
+                this.pokeService.getPokemonById(id).subscribe(pokemon => {
+                    this.dataSource.data = [this.mapToTableRow(pokemon)];
+                }, () => this.dataSource.data = []);
+            } else {
+                const filtered = this.allPokemonNames.filter(name =>
+                    name.includes(val)
+                );
+                this.filteredPokemonNames = filtered;
+
+                if (this.allPokemonNames.includes(val)) {
+                    this.pokeService.getPokemonByName(val).subscribe(pokemon => {
+                        this.dataSource.data = [this.mapToTableRow(pokemon)];
+                    }, () => this.dataSource.data = []);
+                }
+            }
         });
-      },
-      error: (err) => console.error('Error loading Pokémon page', err)
-    });
-  }
-
-  onPageChange(event: PageEvent): void {
-    this.pageSize = event.pageSize;
-    this.currentPage = event.pageIndex;
-    this.loadPokemons();
-  }
-
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-
-    if (!filterValue) return;
-
-    // Si es un número, buscar por ID
-    const id = parseInt(filterValue, 10);
-    if (!isNaN(id)) {
-      this.pokeService.getPokemonById(id).subscribe(pokemon => {
-        this.dataSource.data = [this.mapToTableRow(pokemon)];
-      }, () => {
-        this.dataSource.data = [];
-      });
-    } else {
-      // Si es texto, buscar por nombre
-      this.pokeService.getPokemonByName(filterValue).subscribe(pokemon => {
-        this.dataSource.data = [this.mapToTableRow(pokemon)];
-      }, () => {
-        this.dataSource.data = [];
-      });
     }
-  }
 
-  mapToTableRow(pokemon: any) {
-    return {
-      position: pokemon.id,
-      name: pokemon.name,
-      image: pokemon.sprites.front_default,
-    };
-  }
+    onOptionSelected(event: MatAutocompleteSelectedEvent): void {
+        const name = event.option.value;
+        this.pokeService.getPokemonByName(name).subscribe(pokemon => {
+            this.dataSource.data = [this.mapToTableRow(pokemon)];
+        }, () => this.dataSource.data = []);
+    }
 
-  getRow(row: any): void {
-    this.router.navigateByUrl(`/pokemon/${row.position}`);
-  }
+    loadAllPokemonNames(): void {
+        this.pokeService.getPokemonPage(1000, 0).subscribe({
+            next: (response: { count: number; results: NamedAPIResource[] }) => {
+                this.allPokemonNames = response.results.map((p: NamedAPIResource) => p.name);
+            },
+            error: (err) => console.error('Error loading names', err)
+        });
+    }
+
+    loadPokemons(): void {
+        const offset = this.currentPage * this.pageSize;
+
+        this.pokeService.getPokemonPage(this.pageSize, offset).subscribe({
+            next: (response: { count: number; results: NamedAPIResource[] }) => {
+                const requests: Observable<Pokemon>[] = response.results.map((pokemon: NamedAPIResource) =>
+                    this.pokeService.getPokemonByUrl(pokemon.url)
+                );
+
+                forkJoin(requests).subscribe({
+                    next: (results: Pokemon[]) => {
+                        const pokemons = results.map((res: Pokemon) => this.mapToTableRow(res));
+                        this.dataSource.data = pokemons;
+                        this.positionTotal = response.count;
+                    },
+                    error: (err) => console.error('Error joining Pokémon requests', err)
+                });
+            },
+            error: (err) => console.error('Error loading Pokémon page', err)
+        });
+    }
+
+    onPageChange(event: PageEvent): void {
+        this.pageSize = event.pageSize;
+        this.currentPage = event.pageIndex;
+        this.loadPokemons();
+    }
+
+    mapToTableRow(pokemon: Pokemon): PokemonTableRow {
+        return {
+            position: pokemon.id,
+            name: pokemon.name,
+            image: pokemon.sprites.front_default || ''
+        };
+    }
+
+    getRow(row: PokemonTableRow): void {
+        this.router.navigateByUrl(`/pokemon/${row.position}`);
+    }
+}
+
+interface PokemonTableRow {
+    position: number;
+    name: string;
+    image: string;
 }

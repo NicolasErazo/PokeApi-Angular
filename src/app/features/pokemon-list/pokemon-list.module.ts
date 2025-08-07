@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { PokemonListRoutingModule } from './pokemon-list-routing.module';
-import { PokeTableComponent } from './components/poke-table/poke-table.component';
+
 import { MaterialModule } from 'src/app/shared/material.module';
+import { PokeTableComponent } from './components/poke-table/poke-table.component';
 
 @NgModule({
     declarations: [
@@ -12,7 +15,7 @@ import { MaterialModule } from 'src/app/shared/material.module';
         CommonModule,
         PokemonListRoutingModule,
         MaterialModule,
-        NgOptimizedImage
+        ReactiveFormsModule
     ]
 })
 export class PokemonListModule { }

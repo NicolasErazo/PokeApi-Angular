@@ -1,10 +1,12 @@
 <div class="container py-4">
 
     <!-- Filtro -->
-    <mat-form-field appearance="outline" class="w-100 mb-4">
-        <mat-label>Filtrar Pokémon</mat-label>
-        <input matInput #input (keyup)="applyFilter($event)" placeholder="Ej: pikachu o 25">
-    </mat-form-field>
+    <input type="text" matInput [formControl]="pokemonCtrl" [matAutocomplete]="auto" placeholder="Ej: pikachu o 25">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+        <mat-option *ngFor="let name of filteredPokemonNames" [value]="name">
+            {{ name }}
+        </mat-option>
+    </mat-autocomplete>
 
     <!-- Tabla -->
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 w-100">
@@ -37,7 +39,7 @@
 
         <!-- Fila sin datos -->
         <tr class="mat-row" *matNoDataRow>
-            <td mat-cell colspan="3">No hay coincidencias para "{{ input.value }}"</td>
+            <td mat-cell colspan="3">No hay coincidencias para "{{ pokemonCtrl.value }}"</td>
         </tr>
 
     </table>

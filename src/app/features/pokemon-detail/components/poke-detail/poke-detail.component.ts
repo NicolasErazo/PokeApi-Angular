@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { ActivatedRoute } from '@angular/router';
 import { Pokemon } from 'src/app/features/pokemon/interfaces';
@@ -11,14 +11,12 @@ import { Pokemon } from 'src/app/features/pokemon/interfaces';
 export class PokeDetailComponent implements OnInit {
 
   pokemon!: Pokemon;
-  pokemonImgFront: string = '';
-  pokemonImgShiny: string = '';
+  pokemonImgFront = '';
+  pokemonImgShiny = '';
   pokemonType: string[] = [];
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private pokemonService: PokemonService
-  ) { }
+  activatedRoute = inject(ActivatedRoute);
+  pokemonService = inject(PokemonService);
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {

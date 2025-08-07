@@ -11,6 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSortModule } from '@angular/material/sort';
+import { MatOptionModule } from '@angular/material/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [
@@ -25,7 +27,10 @@ import { MatSortModule } from '@angular/material/sort';
     MatFormFieldModule,
     MatInputModule,
     MatChipsModule,
-    MatSortModule
+    MatSortModule,
+    MatOptionModule,
+    MatAutocompleteModule
+
   ],
   exports: [
     MatButtonModule,
@@ -39,7 +44,9 @@ import { MatSortModule } from '@angular/material/sort';
     MatFormFieldModule,
     MatInputModule,
     MatChipsModule,
-    MatSortModule
+    MatSortModule,
+    MatOptionModule,
+    MatAutocompleteModule
   ]
 })
 export class MaterialModule { }

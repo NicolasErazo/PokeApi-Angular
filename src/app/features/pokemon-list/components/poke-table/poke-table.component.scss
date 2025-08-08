@@ -1,143 +1,6 @@
-@import "src/assets/styles/style.scss";
-
-// =======================================
-// VARIABLES
-// =======================================
-:root {
-  --primary-color: #d3004b;
-  --secondary-color: #3d2b45;
-  --accent-color: #ff4081;
-  --text-color: white;
-  --hover-color: rgba(211, 0, 75, 0.3);
-  --border-radius: 8px;
-  --transition: all 0.3s ease;
-}
-
-// =======================================
-// CONTAINER
-// =======================================
-.container {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 1rem;
-  text-align: center;
-  background: linear-gradient(
-    to bottom,
-    #212121,
-    #3d2b45,
-    #6b2d5b,
-    #a11f5e,
-    #d3004b,
-    #d3004b,
-    #d3004b,
-    #d3004b,
-    #a11f5e,
-    #6b2d5b,
-    #3d2b45,
-    #212121
-  );
-  color: var(--text-color);
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  min-height: 100vh;
-}
-
-// =======================================
-// BARRA DE BÚSQUEDA (MAT-FORM-FIELD)
-// =======================================
-.mat-mdc-form-field,
-.mat-form-field {
-  width: 80%;
-  max-width: 500px;
-  margin: 20px 0;
-
-  // Wrapper del input
-  .mat-mdc-form-field-flex,
-  .mat-form-field-wrapper {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
-    padding: 0 15px;
-    transition: var(--transition);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(211, 0, 75, 0.5);
-    }
-  }
-
-  // Input text
-  .mat-mdc-input-element,
-  .mat-input-element {
-    color: var(--text-color) !important;
-    caret-color: var(--accent-color);
-    padding: 12px 0;
-    font-size: 1.1rem;
-    background: transparent;
-
-    &::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
-  }
-
-  // Label
-  .mat-mdc-form-field-label,
-  .mat-form-field-label {
-    color: rgba(255, 255, 255, 0.7) !important;
-    margin-left: 15px;
-  }
-
-  // Underline (ocultar)
-  .mat-mdc-form-field-bottom-align,
-  .mat-form-field-underline {
-    display: none;
-  }
-
-  // Estado focused
-  &.mat-focused,
-  &.mat-mdc-form-field-focus-overlay {
-    .mat-mdc-form-field-flex,
-    .mat-form-field-wrapper {
-      background: rgba(211, 0, 75, 0.2);
-      box-shadow: 0 0 10px rgba(211, 0, 75, 0.5);
-      border-color: var(--accent-color);
-    }
-  }
-}
-
-// Panel de autocomplete
-.mat-mdc-autocomplete-panel,
-.mat-autocomplete-panel {
-  background: linear-gradient(to bottom, #3d2b45, #6b2d5b) !important;
-  border: 1px solid rgba(211, 0, 75, 0.5);
-  margin-top: 8px;
-  border-radius: 12px;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-
-  .mat-mdc-option,
-  .mat-option {
-    color: var(--text-color) !important;
-    border-bottom: 1px solid rgba(211, 0, 75, 0.3);
-    transition: var(--transition);
-
-    &:hover,
-    &.mat-active,
-    &.mdc-list-item--selected {
-      background: rgba(211, 0, 75, 0.4) !important;
-      color: white !important;
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-}
-
-// =======================================
-// TABLA
-// =======================================
+/* =======================
+   TABLA
+======================= */
 .mat-mdc-table,
 table {
   width: 100%;
@@ -149,282 +12,148 @@ table {
   overflow: hidden;
 }
 
-// Cabecera de la tabla
+/* Cabecera */
 .mat-mdc-header-row,
 .mat-header-row {
   background: rgba(211, 0, 75, 0.7) !important;
-
   .mat-mdc-header-cell,
   .mat-header-cell {
     color: var(--text-color) !important;
-    font-size: 1rem;
     font-weight: bold;
-    border-bottom: none;
     padding: 16px 8px;
   }
 }
 
-// Filas de la tabla
+/* Filas */
 .mat-mdc-row,
 .mat-row {
   transition: var(--transition);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
   &:nth-child(even) {
     background: rgba(255, 255, 255, 0.1);
   }
-
   &:nth-child(odd) {
     background: rgba(255, 255, 255, 0.05);
   }
-
   &:hover {
     background: var(--hover-color) !important;
     transform: scale(1.01);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     cursor: pointer;
   }
-
   .mat-mdc-cell,
   .mat-cell {
     color: var(--text-color);
-    border-bottom: none;
     padding: 12px 8px;
   }
+  animation: fadeInUp 0.5s ease-out;
 }
 
-// =======================================
-// PAGINADOR (MAT-PAGINATOR)
-// =======================================
-.mat-mdc-paginator,
-.mat-paginator {
-  background: transparent !important;
-  color: var(--text-color) !important;
-  margin-top: 20px;
-  border-radius: 24px;
-  padding: 10px 20px;
-  border: 1px solid rgba(211, 0, 75, 0.3);
-
-  // Container principal
-  .mat-mdc-paginator-container,
-  .mat-paginator-container {
-    justify-content: center;
-    align-items: center;
-  }
-
-  // Texto y labels
-  .mat-mdc-paginator-page-size,
-  .mat-mdc-paginator-range-label,
-  .mat-paginator-page-size,
-  .mat-paginator-range-label {
-    color: var(--text-color);
-    font-size: 0.9rem;
-    margin: 0 10px;
-  }
-
-  // Select dropdown
-  .mat-mdc-select,
-  .mat-select {
-    .mat-mdc-select-value,
-    .mat-select-value {
-      color: var(--text-color);
-    }
-    
-    .mat-mdc-select-arrow,
-    .mat-select-arrow {
-      color: rgba(255, 255, 255, 0.7);
-    }
-  }
-
-  // Botones de navegación
-  .mat-mdc-icon-button,
-  .mat-paginator-navigation {
-    background: rgba(211, 0, 75, 0.3);
-    border-radius: 50%;
-    margin: 0 5px;
-    width: 32px;
-    height: 32px;
-    transition: var(--transition);
-    color: var(--text-color);
-
-    &:hover:not([disabled]) {
-      background: rgba(211, 0, 75, 0.6);
-      transform: scale(1.1);
-    }
-
-    // Iconos
-    .mat-mdc-button-touch-target,
-    .mat-paginator-icon {
-      fill: var(--text-color);
-      color: var(--text-color);
-    }
-
-    // Estado deshabilitado
-    &[disabled],
-    &.mat-paginator-navigation-disabled {
-      background: rgba(255, 255, 255, 0.1) !important;
-      opacity: 0.5;
-      transform: none;
-    }
-  }
-}
-
-// =======================================
-// IMÁGENES DE POKÉMON
-// =======================================
+/* Imagen Pokémon */
 .poke-img {
   transition: var(--transition);
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
   border-radius: 8px;
-
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
   &:hover {
     transform: scale(1.1);
     filter: drop-shadow(0 0 10px rgba(211, 0, 75, 0.8));
   }
 }
 
-// =======================================
-// CHIPS (PARA TIPOS DE POKÉMON)
-// =======================================
-.mat-mdc-chip-set,
-.mat-chip-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-}
-
-.mat-mdc-chip,
-.mat-chip {
-  background: rgba(211, 0, 75, 0.7) !important;
-  color: var(--text-color) !important;
-  border-radius: 16px;
-  font-weight: 500;
-  transition: var(--transition);
-
-  &:hover {
-    background: rgba(211, 0, 75, 0.9) !important;
-    transform: scale(1.05);
-  }
-}
-
-// =======================================
-// LOADING SPINNER
-// =======================================
-.mat-mdc-progress-spinner,
-.mat-spinner {
-  .mat-mdc-progress-spinner-circle,
-  .mat-progress-spinner-circle {
-    stroke: var(--accent-color);
-  }
-}
-
-// =======================================
-// RESPONSIVE DESIGN
-// =======================================
-@media (max-width: 1024px) {
-  .mat-mdc-form-field,
-  .mat-form-field {
-    width: 90%;
-  }
-  
-  .container {
-    margin: 10px;
-    padding: 0 0.5rem;
-  }
-}
-
+/* Responsive específico de la tabla */
 @media (max-width: 768px) {
-  .container {
-    padding: 0.5rem;
-    margin: 5px;
-  }
-
-  .mat-mdc-form-field,
-  .mat-form-field {
-    width: 95%;
-    max-width: none;
-  }
-
   .mat-mdc-table,
   table {
     min-width: 600px;
     font-size: 0.9rem;
   }
-
-  .mat-mdc-paginator,
-  .mat-paginator {
-    padding: 8px 10px;
-    
-    .mat-mdc-paginator-page-size,
-    .mat-mdc-paginator-range-label,
-    .mat-paginator-page-size,
-    .mat-paginator-range-label {
-      font-size: 0.8rem;
-      margin: 0 5px;
-    }
-  }
 }
-
 @media (max-width: 480px) {
   .mat-mdc-table,
   table {
     font-size: 0.8rem;
   }
-  
   .poke-img {
     max-width: 60px;
     height: auto;
   }
 }
 
-// =======================================
-// ANIMACIONES Y EFECTOS ESPECIALES
-// =======================================
-@keyframes glow {
-  0% { box-shadow: 0 0 5px rgba(211, 0, 75, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(211, 0, 75, 0.8); }
-  100% { box-shadow: 0 0 5px rgba(211, 0, 75, 0.5); }
+/* =======================
+   PAGINACIÓN CON GRADIENTE
+======================= */
+::ng-deep .mat-mdc-paginator {
+  background: linear-gradient(
+    to bottom,
+    rgba(211, 0, 75, 0.9),
+    rgba(100, 0, 50, 0.8)
+  ) !important;
+  color: var(--text-color) !important;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
-.container {
-  animation: glow 3s ease-in-out infinite;
+/* Iconos y textos */
+/* Quitar fondo y borde del selector en el paginador */
+::ng-deep .mat-mdc-paginator .mat-mdc-form-field-flex {
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-// Efecto de entrada para las filas de la tabla
-.mat-mdc-row,
-.mat-row {
-  animation: fadeInUp 0.5s ease-out;
+::ng-deep .mat-mdc-paginator .mat-mdc-select-trigger {
+  background: transparent !important;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+::ng-deep .mat-mdc-paginator .mat-mdc-select-value {
+  color: var(--text-color) !important;
 }
 
-// =======================================
-// SCROLLBAR PERSONALIZADO
-// =======================================
-::-webkit-scrollbar {
-  width: 8px;
+::ng-deep .mat-mdc-paginator .mat-mdc-select-arrow {
+  color: var(--text-color) !important;
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+
+/* =======================
+   FILTRO DE BÚSQUEDA (Forzado)
+======================= */
+::ng-deep input.mat-mdc-input-element {
+  background: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ) !important; /* Fondo translúcido oscuro */
+  color: var(--text-color) !important;
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  padding: 8px 12px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(211, 0, 75, 0.7);
-  border-radius: 4px;
-  
-  &:hover {
-    background: rgba(211, 0, 75, 0.9);
-  }
+::ng-deep .mat-mdc-form-field-flex {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: var(--border-radius);
+}
+
+::ng-deep .mat-mdc-form-field-label {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+::ng-deep .mat-mdc-form-field-ripple {
+  background-color: var(--hover-color) !important;
+}
+
+/* =======================
+   AUTOCOMPLETE PANEL
+======================= */
+::ng-deep .mat-mdc-autocomplete-panel {
+  background: rgba(211, 0, 75, 0.9) !important;
+  color: var(--text-color) !important;
+  border-radius: var(--border-radius);
+}
+
+::ng-deep .mat-mdc-option {
+  color: var(--text-color) !important;
+}
+
+::ng-deep .mat-mdc-option:hover {
+  background: var(--hover-color) !important;
 }

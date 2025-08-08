@@ -20,7 +20,7 @@ export class PokeTableComponent implements OnInit {
     dataSource = new MatTableDataSource<PokemonTableRow>([]);
 
     positionTotal = 0;
-    pageSize = 5;
+    pageSize = 10;
     currentPage = 0;
 
     pokemonCtrl = new FormControl();

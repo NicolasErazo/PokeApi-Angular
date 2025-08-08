@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnInit, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -15,7 +15,7 @@ import { NamedAPIResource } from 'src/app/core/services/interfaces/api-response.
     templateUrl: './poke-table.component.html',
     styleUrls: ['./poke-table.component.scss']
 })
-export class PokeTableComponent implements OnInit {
+export class PokeTableComponent implements OnInit, AfterViewInit {
     displayedColumns: string[] = ['position', 'image', 'name'];
     dataSource = new MatTableDataSource<PokemonTableRow>([]);
 
@@ -23,7 +23,9 @@ export class PokeTableComponent implements OnInit {
     pageSize = 10;
     currentPage = 0;
 
-    pokemonCtrl = new FormControl();
+    pokemonCtrl = new FormControl('', [
+        Validators.pattern(/^(?!-)\d*$|^[a-zA-Z]+$/)
+    ]);
     allPokemonNames: string[] = [];
     filteredPokemonNames: string[] = [];
 
@@ -42,6 +44,13 @@ export class PokeTableComponent implements OnInit {
         ).subscribe(value => {
             const val = (value || '').toString().trim().toLowerCase();
 
+            // Si se ingresa un número negativo, borrar y cargar todos
+            if (val.startsWith('-')) {
+                this.pokemonCtrl.setValue('', { emitEvent: false }); // Borra el valor sin disparar nuevo evento
+                this.loadPokemons(); // Carga todos los Pokémon
+                return;
+            }
+
             if (!val) {
                 this.loadPokemons();
                 return;
@@ -49,6 +58,11 @@ export class PokeTableComponent implements OnInit {
 
             const id = parseInt(val, 10);
             if (!isNaN(id)) {
+                if (id <= 0) { // Si es cero o negativo
+                    this.pokemonCtrl.setValue('', { emitEvent: false });
+                    this.loadPokemons();
+                    return;
+                }
                 this.pokeService.getPokemonById(id).subscribe(pokemon => {
                     this.dataSource.data = [this.mapToTableRow(pokemon)];
                 }, () => this.dataSource.data = []);
@@ -65,6 +79,11 @@ export class PokeTableComponent implements OnInit {
                 }
             }
         });
+    }
+
+    ngAfterViewInit(): void {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
     }
 
     onOptionSelected(event: MatAutocompleteSelectedEvent): void {
@@ -94,15 +113,43 @@ export class PokeTableComponent implements OnInit {
 
                 forkJoin(requests).subscribe({
                     next: (results: Pokemon[]) => {
-                        const pokemons = results.map((res: Pokemon) => this.mapToTableRow(res));
-                        this.dataSource.data = pokemons;
+                        // Asigna los datos primero
+                        this.dataSource.data = results.map(res => this.mapToTableRow(res));
                         this.positionTotal = response.count;
+
+                        // Actualiza el paginador después de asignar los datos
+                        setTimeout(() => {
+                            if (this.paginator) {
+                                this.paginator.length = this.positionTotal;
+                                this.paginator.pageIndex = this.currentPage;
+                                this.paginator.pageSize = this.pageSize;
+                            }
+                        });
                     },
-                    error: (err) => console.error('Error joining Pokémon requests', err)
+                    error: (err) => this.handleError(err)
                 });
             },
-            error: (err) => console.error('Error loading Pokémon page', err)
+            error: (err) => this.handleError(err)
         });
+    }
+
+    private handleError(err: any): void {
+        console.error('Error loading Pokémon', err);
+        this.dataSource.data = [];
+        this.positionTotal = 0;
+        if (this.paginator) {
+            this.paginator.length = 0;
+            this.paginator.pageIndex = 0;
+        }
+    }
+
+    private resetPagination(): void {
+        this.dataSource.data = [];
+        this.positionTotal = 0;
+        if (this.paginator) {
+            this.paginator.length = 0;
+            this.paginator.pageIndex = 0;
+        }
     }
 
     onPageChange(event: PageEvent): void {

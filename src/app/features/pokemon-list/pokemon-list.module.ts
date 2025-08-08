@@ -6,6 +6,7 @@ import { PokemonListRoutingModule } from './pokemon-list-routing.module';
 
 import { PokeTableComponent } from './components/poke-table/poke-table.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
         CommonModule,
         PokemonListRoutingModule,
         SharedModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        CdkTableModule
     ]
 })
 export class PokemonListModule { }

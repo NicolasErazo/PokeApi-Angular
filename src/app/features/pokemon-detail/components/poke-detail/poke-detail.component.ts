@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { Pokemon } from 'src/app/features/pokemon/interfaces';
 
@@ -17,6 +17,7 @@ export class PokeDetailComponent implements OnInit {
 
   activatedRoute = inject(ActivatedRoute);
   pokemonService = inject(PokemonService);
+  router = inject(Router);
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -37,6 +38,10 @@ export class PokeDetailComponent implements OnInit {
         console.error('Error fetching Pokémon', err);
       }
     });
+  }
+
+  goBack(): void {
+    this.router.navigateByUrl(`/`);
   }
 
   /**

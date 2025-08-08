@@ -14,6 +14,11 @@ const routes: Routes = [
   {
     path: 'pokemon/:id',
     loadChildren: () => import('./features/pokemon-detail/pokemon-detail.module').then(m => m.PokemonDetailModule)
+  },
+  {
+    path: '**',
+    redirectTo: '/pokemones',
+    pathMatch: 'full'
   }
 ];
 

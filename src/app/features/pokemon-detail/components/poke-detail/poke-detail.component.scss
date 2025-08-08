@@ -98,8 +98,8 @@ mat-chip-listbox {
 }
 
 .bg-normal {
-  background: white;
-  color: black;
+  background: linear-gradient(135deg, #f8f8f8, #605fa1);
+  color: #222;
 }
 
 /* ==== Degradados por tipo ==== */
@@ -169,4 +169,36 @@ mat-chip-listbox {
 
 .bg-fairy {
   background: linear-gradient(90deg, #ff9a9e, #fecfef);
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(90deg, #ff0080, #7928ca);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+
+  mat-icon {
+    font-size: 20px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #ff4fa2, #9250d9);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
 }

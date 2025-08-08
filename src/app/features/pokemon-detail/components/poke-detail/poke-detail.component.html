@@ -1,4 +1,8 @@
 <mat-card class="poke-card" *ngIf="pokemon" [ngClass]="'bg-' + pokemon.types[0].type.name">
+  <button mat-button class="back-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon> Volver
+  </button>
+
   <mat-card-header>
     <mat-card-title>
       {{ pokemon.name | titlecase }}
@@ -53,4 +57,5 @@
       </div>
     </div>
   </mat-card-content>
+
 </mat-card>

@@ -1,23 +1,20 @@
-import { NgModule } from '@angular/core';
+import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-
-import { PokemonListRoutingModule } from './pokemon-list-routing.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { PokeTableComponent } from './components/poke-table/poke-table.component';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { CdkTableModule } from '@angular/cdk/table';
+import { PokemonListRoutingModule } from './pokemon-list-routing.module';
 
 @NgModule({
-    declarations: [
-        PokeTableComponent
-    ],
-    imports: [
-        CommonModule,
-        PokemonListRoutingModule,
-        SharedModule,
-        ReactiveFormsModule,
-        CdkTableModule
-    ]
+  declarations: [PokeTableComponent],
+  imports: [
+    CommonModule,
+    PokemonListRoutingModule,
+    SharedModule,
+    ReactiveFormsModule,
+    CdkTableModule,
+  ],
 })
-export class PokemonListModule { }
+export class PokemonListModule {}

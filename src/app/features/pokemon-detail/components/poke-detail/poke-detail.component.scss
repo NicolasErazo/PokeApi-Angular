@@ -1,88 +1,167 @@
-@import "src/assets/styles/style.scss";
-
-// ========= CARD =========
-.card {
-  max-width: 1200px;
-  margin: 20px auto;
+.poke-card {
+  max-width: 500px;
+  margin: 2rem auto;
   padding: 1rem;
-  background-image: linear-gradient(
-    to bottom,
-    #212121,
-    #3d2b45,
-    #6b2d5b,
-    #a11f5e,
-    #d3004b,
-    #d3004b,
-    #d3004b,
-    #d3004b,
-    #a11f5e,
-    #6b2d5b,
-    #3d2b45,
-    #212121
-  );
-  border-radius: 10px;
-}
-
-// ========= IMAGE =========
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-// ========= CARD HEADER =========
-.mat-card-header {
-  background-color: $white;
-  padding: 10px 20px;
-  border-radius: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  border-radius: 20px;
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
 }
 
-// ========= CARD TITLE =========
-.mat-card-title {
-  text-transform: uppercase;
-  color: $black;
-  font-size: 1.5rem;
+/* Imagen */
+.poke-img {
+  width: 200px;
+  height: auto;
+  transition: transform 0.3s ease-in-out;
+}
+.poke-img:hover {
+  transform: scale(1.1);
 }
 
-// ========= UTILITY CLASSES =========
-.mayuscula ::first-letter {
-  text-transform: uppercase;
+.section {
+  margin-top: 1.5rem;
 }
 
-// ========= RESPONSIVE BREAKPOINTS =========
+.stats-summary {
+  display: flex;
+  justify-content: space-around;
+}
 
-// == Tablets y abajo ==
-@media (max-width: 1024px) {
-  .card {
-    padding: 1rem;
-  }
+.type-chip {
+  font-weight: bold;
+  color: white;
+}
 
-  .mat-card-title {
-    font-size: 1.3rem;
-  }
+.stat-bar {
+  margin-bottom: 1rem;
+  text-align: left;
 
-  img {
-    max-width: 80%;
+  .label {
+    font-weight: 500;
+    margin-bottom: 4px;
   }
 }
 
-// == Móviles ==
-@media (max-width: 768px) {
-  .card {
-    padding: 0.75rem;
-  }
+::ng-deep mat-progress-bar {
+  height: 10px;
+  border-radius: 10px;
+}
 
-  .mat-card-title {
-    font-size: 1.1rem;
-  }
+.type-container {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+}
 
-  img {
-    max-width: 100%;
+mat-chip-listbox {
+  gap: 8px; /* Espacio entre chips */
+}
+
+.type-chip {
+  font-weight: bold;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 16px;
+}
+
+/* Sección de habilidades */
+.abilities-section {
+  text-align: left;
+  margin-top: 1rem;
+  padding: 0 1rem;
+}
+
+.section-title {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center; /* Si quieres centrar el título */
+}
+
+.abilities-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+
+  li {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: capitalize;
   }
+}
+
+/* ==== Degradados por tipo ==== */
+.bg-fire {
+  background: linear-gradient(90deg, #ff7e00, #ff0000);
+}
+
+.bg-water {
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+}
+
+.bg-grass {
+  background: linear-gradient(90deg, #56ab2f, #a8e063);
+}
+
+.bg-electric {
+  background: linear-gradient(90deg, #f9d423, #ff4e50);
+}
+
+.bg-ice {
+  background: linear-gradient(90deg, #00c9ff, #92fe9d);
+}
+
+.bg-fighting {
+  background: linear-gradient(90deg, #d31027, #ea384d);
+}
+
+.bg-poison {
+  background: linear-gradient(90deg, #7b4397, #dc2430);
+}
+
+.bg-ground {
+  background: linear-gradient(90deg, #ba8b02, #181818);
+}
+
+.bg-flying {
+  background: linear-gradient(90deg, #1e3c72, #2a5298);
+}
+
+.bg-psychic {
+  background: linear-gradient(90deg, #a18cd1, #fbc2eb);
+}
+
+.bg-bug {
+  background: linear-gradient(90deg, #a8e063, #56ab2f);
+}
+
+.bg-rock {
+  background: linear-gradient(90deg, #757f9a, #d7dde8);
+}
+
+.bg-ghost {
+  background: linear-gradient(90deg, #232526, #414345);
+}
+
+.bg-dragon {
+  background: linear-gradient(90deg, #200122, #6f0000);
+}
+
+.bg-dark {
+  background: linear-gradient(90deg, #000000, #434343);
+}
+
+.bg-steel {
+  background: linear-gradient(90deg, #757f9a, #d7dde8);
+}
+
+.bg-fairy {
+  background: linear-gradient(90deg, #ff9a9e, #fecfef);
 }

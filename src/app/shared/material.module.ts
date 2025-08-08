@@ -14,6 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { MatOptionModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   imports: [
@@ -30,7 +32,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatInputModule,
     MatSortModule,
     MatOptionModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTabsModule,
+    MatProgressBarModule
   ],
   exports: [
     MatChipsModule,
@@ -46,7 +50,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatInputModule,
     MatSortModule,
     MatOptionModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTabsModule,
+    MatProgressBarModule
   ]
-})
-export class MaterialModule { }
+}) export class MaterialModule { }

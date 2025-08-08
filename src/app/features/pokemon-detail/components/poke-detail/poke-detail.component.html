@@ -1,30 +1,56 @@
-<mat-card class="card">
+<mat-card class="poke-card" *ngIf="pokemon" [ngClass]="'bg-' + pokemon.types[0].type.name">
+  <mat-card-header>
+    <mat-card-title>
+      {{ pokemon.name | titlecase }}
+      <span class="poke-id">#{{ pokemon.id }}</span>
+    </mat-card-title>
+  </mat-card-header>
 
-  <div class="card-header mat-card-title">
-    <mat-card-header class="mat-card-header">
-      <mat-card-title class="mat-card-title">{{pokemon.name}}</mat-card-title>
-      <br><br>
-    </mat-card-header>
-  </div>
+  <mat-card-content>
+    <!-- Imagen -->
+    <mat-tab-group animationDuration="500ms" class="img-tabs">
+      <mat-tab label="Normal">
+        <img class="poke-img" [src]="pokemonImgFront" alt="{{ pokemon.name }}" />
+      </mat-tab>
+      <mat-tab label="Shiny">
+        <img class="poke-img" [src]="pokemonImgShiny" alt="{{ pokemon.name }} Shiny" />
+      </mat-tab>
+    </mat-tab-group>
 
-  <div class="row text-center mb-4">
-    <div class="col-md-6">
-      <img mat-card-image src="{{pokemonImgFront}}" alt="pokemon">
+    <!-- Tipos -->
+    <div class="section type-container">
+      <mat-chip-listbox>
+        <mat-chip *ngFor="let t of pokemon.types" class="type-chip" [ngClass]="'type-' + t.type.name">
+          {{ t.type.name | titlecase }}
+        </mat-chip>
+      </mat-chip-listbox>
     </div>
-    <div class="col-md-6" *ngIf="pokemonImgShiny; else elseImg">
-      <img mat-card-image src="{{pokemonImgShiny}}" alt="pokemon">
+
+    <!-- Peso y altura -->
+    <div class="section stats-summary">
+      <div><strong>Peso:</strong> {{ getWeight() }}</div>
+      <div><strong>Altura:</strong> {{ getHeight() }}</div>
     </div>
-    <ng-template #elseImg>
-      <div class="col-md-6">
-        <img mat-card-image src="../../../assets/images/Unavailable.png" style="width: 80%;" alt="pokemon">
+
+    <!-- Habilidades -->
+    <div class="section abilities-section">
+      <strong class="section-title">Habilidades:</strong>
+      <ul class="abilities-list">
+        <li *ngFor="let ability of pokemon.abilities">
+          {{ ability.ability.name | titlecase }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="section">
+      <strong>Estadísticas:</strong>
+      <div *ngFor="let stat of pokemon.stats" class="stat-bar">
+        <div class="label">
+          {{ stat.stat.name | titlecase }} ({{ stat.base_stat }})
+        </div>
+        <mat-progress-bar [value]="stat.base_stat" [color]="stat.base_stat > 60 ? 'accent' : 'warn'"></mat-progress-bar>
       </div>
-    </ng-template>
-  </div>
-
-  <div class="card-footer text-muted d-flex justify-content-center">
-    <mat-chip-list>
-      <mat-chip *ngFor="let t of pokemon.types" [ngClass]="t.type.name">{{ t.type.name | titlecase }}</mat-chip>
-    </mat-chip-list>
-  </div>
-
+    </div>
+  </mat-card-content>
 </mat-card>

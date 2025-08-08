@@ -1,6 +1,40 @@
-footer{
-    height: 80px;
-    color: white;
-    font-size: large;
-    bottom: 0;
+.footer {
+  background: linear-gradient(90deg, #ff0080, #7928ca);
+  padding: 1rem 0;
+  text-align: center;
+  color: white;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  font-family: "Poppins", sans-serif;
+
+  .footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .footer-social {
+    margin-bottom: 0.5rem;
+
+    a {
+      display: inline-block;
+      margin: 0 8px;
+      color: white;
+      font-size: 1.2rem;
+      transition: transform 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        transform: scale(1.2);
+        color: #ffe259;
+      }
+    }
+  }
+
+  .footer-text {
+    font-size: 0.85rem;
+    opacity: 0.85;
+
+    .highlight {
+      font-weight: bold;
+      color: #ffe259;
+    }
+  }
 }

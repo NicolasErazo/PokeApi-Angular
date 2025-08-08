@@ -12,6 +12,12 @@ table {
   overflow: hidden;
 }
 
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Cabecera */
 .mat-mdc-header-row,
 .mat-header-row {
@@ -64,10 +70,16 @@ table {
 @media (max-width: 768px) {
   .mat-mdc-table,
   table {
-    min-width: 600px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    min-width: unset; 
+  }
+
+  .poke-img {
+    max-width: 50px;
+    height: auto;
   }
 }
+
 @media (max-width: 480px) {
   .mat-mdc-table,
   table {
@@ -110,7 +122,6 @@ table {
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-arrow {
   color: var(--text-color) !important;
 }
-
 
 /* =======================
    FILTRO DE BÚSQUEDA (Forzado)

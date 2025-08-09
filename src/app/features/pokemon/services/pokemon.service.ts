@@ -1,40 +1,21 @@
-import { HttpClient } from '@angular/common/http';
+// src/app/features/pokemon/services/pokemon.service.ts
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Pokemon } from 'src/app/features/pokemon/interfaces';
 
-import { NamedAPIResource } from '../../../core/services/interfaces';
+import { ApiService } from '../../../core/services/api.service';
+import { PokemonListResponse } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PokemonService {
-  url = 'https://pokeapi.co/api/v2/pokemon';
+  private readonly POKEMON_ENDPOINT = 'pokemon';
+  private apiService = inject(ApiService); // <-- Nueva sintaxis
 
-  private http = inject(HttpClient);
-
-  getPokemons(id: number): Observable<Pokemon> {
-    return this.http.get<Pokemon>(`${this.url}/${id}`);
-  }
-
-  getPokemonPage(
-    limit: number,
-    offset: number
-  ): Observable<{ count: number; results: NamedAPIResource[] }> {
-    return this.http.get<{ count: number; results: NamedAPIResource[] }>(
-      `${this.url}?limit=${limit}&offset=${offset}` // ✅ Arreglado aquí
-    );
-  }
-
-  getPokemonByUrl(url: string): Observable<Pokemon> {
-    return this.http.get<Pokemon>(url);
-  }
-
-  getPokemonById(id: number): Observable<Pokemon> {
-    return this.http.get<Pokemon>(`${this.url}/${id}`);
-  }
-
-  getPokemonByName(name: string): Observable<Pokemon> {
-    return this.http.get<Pokemon>(`${this.url}/${name}`);
+  getPokemons(limit = 20, offset = 0): Observable<PokemonListResponse> {
+    return this.apiService.get<PokemonListResponse>(this.POKEMON_ENDPOINT, {
+      limit,
+      offset,
+    });
   }
 }

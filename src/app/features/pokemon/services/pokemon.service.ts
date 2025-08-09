@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Pokemon } from 'src/app/features/pokemon/interfaces';
 
-import { NamedAPIResource } from './interfaces';
+import { NamedAPIResource } from '../../../core/services/interfaces';
 
 @Injectable({
   providedIn: 'root',

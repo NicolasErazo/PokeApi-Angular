@@ -14,8 +14,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { debounceTime, forkJoin, Observable } from 'rxjs';
 import { NamedAPIResource } from 'src/app/core/services/interfaces/api-response.interface';
-import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { Pokemon } from 'src/app/features/pokemon/interfaces';
+import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 
 @Component({
   selector: 'app-poke-table',

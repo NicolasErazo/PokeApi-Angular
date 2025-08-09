@@ -1,15 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { Pokemon } from 'src/app/features/pokemon/interfaces';
+import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 
 @Component({
   selector: 'app-poke-detail',
   templateUrl: './poke-detail.component.html',
-  styleUrls: ['./poke-detail.component.scss']
+  styleUrls: ['./poke-detail.component.scss'],
 })
 export class PokeDetailComponent implements OnInit {
-
   pokemon!: Pokemon;
   pokemonImgFront = '';
   pokemonImgShiny = '';
@@ -20,7 +19,7 @@ export class PokeDetailComponent implements OnInit {
   router = inject(Router);
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.params.subscribe((params) => {
       const id = +params['id'];
       this.getPokemon(id);
     });
@@ -32,11 +31,11 @@ export class PokeDetailComponent implements OnInit {
         this.pokemon = poke;
         this.pokemonImgFront = poke.sprites?.other?.home?.front_default || '';
         this.pokemonImgShiny = poke.sprites?.other?.home?.front_shiny || '';
-        this.pokemonType = poke.types.map(t => t.type.name);
+        this.pokemonType = poke.types.map((t) => t.type.name);
       },
-      error: err => {
+      error: (err) => {
         console.error('Error fetching Pokémon', err);
-      }
+      },
     });
   }
 
@@ -64,5 +63,4 @@ export class PokeDetailComponent implements OnInit {
   getHeight(): string {
     return (this.pokemon.height / 10).toFixed(1) + ' m';
   }
-
 }

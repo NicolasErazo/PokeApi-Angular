@@ -1,23 +1,16 @@
 export interface Pokemon {
   id: number;
   name: string;
-  base_experience: number;
-  height: number;
-  weight: number;
-  sprites: PokemonSprites;
-  types: PokemonType[];
-  stats: PokemonStat[];
-  abilities: PokemonAbility[];
+  imageUrl: string;
+  types: string[];
 }
 
-export interface PokemonSprites {
-  front_default: string;
-  other: {
-    'official-artwork': {
-      front_default: string;
-    };
-    dream_world: {
-      front_default: string;
-    };
-  };
+export interface PokemonListResponse {
+  count: number;
+  results: PokemonListItem[];
+}
+
+export interface PokemonListItem {
+  name: string;
+  url: string;
 }

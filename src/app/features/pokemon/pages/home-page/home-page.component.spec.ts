@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PokeTableComponent } from './pokemon-list.component';
+import { PokeTableComponent } from './home-page.component';
 
 describe('PokeTableComponent', () => {
   let component: PokeTableComponent;

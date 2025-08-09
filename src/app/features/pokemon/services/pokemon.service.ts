@@ -1,25 +1,50 @@
-// src/app/features/pokemon/services/pokemon.service.ts
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import { ApiService } from '../../../core/services/api.service';
-import { PokemonDetail, PokemonListResponse } from '../models';
+import { PokemonApiDetailResponse } from '../models';
+import {
+  Pokemon,
+  PokemonApiResponse,
+  PokemonListItem,
+  PokemonListResponse,
+} from '../models/pokemon.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class PokemonService {
+  private readonly apiService = inject(ApiService);
   private readonly POKEMON_ENDPOINT = 'pokemon';
-  private apiService = inject(ApiService);
 
-  getPokemons(limit = 20, offset = 0): Observable<PokemonListResponse> {
-    return this.apiService.get<PokemonListResponse>(this.POKEMON_ENDPOINT, {
-      limit,
-      offset,
-    });
+  getPokemons(limit = 10, offset = 0): Observable<PokemonListResponse> {
+    return this.apiService
+      .get<PokemonApiResponse>(this.POKEMON_ENDPOINT, { limit, offset })
+      .pipe(
+        switchMap((apiResponse: PokemonApiResponse) => {
+          const requests = apiResponse.results.map(
+            (item: PokemonListItem, index: number) =>
+              this.getPokemonDetails(offset + index + 1, item.name)
+          );
+          return forkJoin(requests).pipe(
+            map((pokemons: Pokemon[]) => ({
+              count: apiResponse.count,
+              results: pokemons,
+            }))
+          );
+        })
+      );
   }
 
-  getPokemonById(id: number): Observable<PokemonDetail> {
-    return this.apiService.get<PokemonDetail>(`${this.POKEMON_ENDPOINT}/${id}`);
+  private getPokemonDetails(id: number, name: string): Observable<Pokemon> {
+    return this.apiService
+      .getById<PokemonApiDetailResponse>(this.POKEMON_ENDPOINT, id)
+      .pipe(
+        map((details: PokemonApiDetailResponse) => ({
+          id: details.id,
+          name: details.name,
+          imageUrl: details.sprites.front_default,
+          types: details.types.map((t) => t.type.name),
+        }))
+      );
   }
 }

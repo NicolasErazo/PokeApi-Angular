@@ -4,26 +4,13 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/pokemones',
-    pathMatch: 'full'
+    loadChildren: () =>
+      import('./features/pokemon/pokemon.module').then((m) => m.PokemonModule),
   },
-  {
-    path: 'pokemones',
-    loadChildren: () => import('./features/pokemon-list/pokemon-list.module').then(m => m.PokemonListModule)
-  },
-  {
-    path: 'pokemon/:id',
-    loadChildren: () => import('./features/pokemon-detail/pokemon-detail.module').then(m => m.PokemonDetailModule)
-  },
-  {
-    path: '**',
-    redirectTo: '/pokemones',
-    pathMatch: 'full'
-  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

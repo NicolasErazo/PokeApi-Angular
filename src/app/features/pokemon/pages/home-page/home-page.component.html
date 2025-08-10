@@ -66,6 +66,8 @@
         mat-row
         *matRowDef="let row; columns: displayedColumns"
         (click)="viewPokemonDetail(row)"
+        (keydown)="viewPokemonDetail(row)"
+        tabindex="0"
       ></tr>
     </table>
   </div>

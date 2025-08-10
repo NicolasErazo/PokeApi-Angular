@@ -1,8 +1,14 @@
-<mat-card class="poke-card" *ngIf="pokemon" [ngClass]="'bg-' + pokemon.types[0].type.name">
+<mat-card
+  class="poke-card"
+  *ngIf="pokemon && !loading"
+  [ngClass]="'bg-' + pokemon.types[0].type.name"
+>
+  <!-- Botón de volver -->
   <button mat-button class="back-button" (click)="goBack()">
     <mat-icon>arrow_back</mat-icon> Volver
   </button>
 
+  <!-- Encabezado -->
   <mat-card-header>
     <mat-card-title>
       {{ pokemon.name | titlecase }}
@@ -10,22 +16,47 @@
     </mat-card-title>
   </mat-card-header>
 
+  <!-- Contenido -->
   <mat-card-content>
-    <!-- Imagen -->
+    <!-- Pestañas de imágenes -->
     <mat-tab-group animationDuration="500ms" class="img-tabs">
-      <mat-tab label="Normal">
-        <img class="poke-img" [src]="pokemonImgFront" alt="{{ pokemon.name }}" />
+      <mat-tab label="Oficial">
+        <img
+          class="poke-img"
+          [src]="pokemonImgOfficial"
+          [alt]="pokemon.name"
+          onerror="this.src='assets/pokemon-placeholder.png'"
+        />
       </mat-tab>
-      <mat-tab label="Shiny">
-        <img class="poke-img" [src]="pokemonImgShiny" alt="{{ pokemon.name }} Shiny" />
+
+      <mat-tab label="Normal" *ngIf="pokemonImgFront">
+        <img
+          class="poke-img"
+          [src]="pokemonImgFront"
+          [alt]="pokemon.name"
+          onerror="this.src='assets/pokemon-placeholder.png'"
+        />
+      </mat-tab>
+
+      <mat-tab label="Shiny" *ngIf="pokemonImgShiny">
+        <img
+          class="poke-img"
+          [src]="pokemonImgShiny"
+          [alt]="pokemon.name + ' Shiny'"
+          onerror="this.src='assets/pokemon-placeholder.png'"
+        />
       </mat-tab>
     </mat-tab-group>
 
     <!-- Tipos -->
     <div class="section type-container">
-      <mat-chip-listbox>
-        <mat-chip *ngFor="let t of pokemon.types" class="type-chip" [ngClass]="'type-' + t.type.name">
-          {{ t.type.name | titlecase }}
+      <mat-chip-listbox aria-label="Tipos de Pokémon">
+        <mat-chip
+          *ngFor="let type of pokemon.types"
+          class="type-chip"
+          [ngClass]="'type-' + type.type.name"
+        >
+          {{ type.type.name | titlecase }}
         </mat-chip>
       </mat-chip-listbox>
     </div>
@@ -37,7 +68,7 @@
     </div>
 
     <!-- Habilidades -->
-    <div class="section abilities-section">
+    <div class="section abilities-section" *ngIf="pokemon.abilities?.length">
       <strong class="section-title">Habilidades:</strong>
       <ul class="abilities-list">
         <li *ngFor="let ability of pokemon.abilities">
@@ -47,15 +78,34 @@
     </div>
 
     <!-- Estadísticas -->
-    <div class="section">
+    <div class="section" *ngIf="pokemon.stats?.length">
       <strong>Estadísticas:</strong>
       <div *ngFor="let stat of pokemon.stats" class="stat-bar">
         <div class="label">
           {{ stat.stat.name | titlecase }} ({{ stat.base_stat }})
         </div>
-        <mat-progress-bar [value]="stat.base_stat" [color]="stat.base_stat > 60 ? 'accent' : 'warn'"></mat-progress-bar>
+        <mat-progress-bar
+          [value]="stat.base_stat"
+          [color]="stat.base_stat > 60 ? 'accent' : 'warn'"
+          mode="determinate"
+        >
+        </mat-progress-bar>
       </div>
     </div>
   </mat-card-content>
-
 </mat-card>
+
+<!-- Estado de carga -->
+<div *ngIf="loading" class="loading-container">
+  <mat-spinner diameter="50"></mat-spinner>
+  <p>Cargando Pokémon...</p>
+</div>
+
+<!-- Manejo de errores -->
+<div *ngIf="!pokemon && !loading" class="error-container">
+  <mat-icon>error_outline</mat-icon>
+  <p>No se pudo cargar la información del Pokémon</p>
+  <button mat-raised-button color="primary" (click)="goBack()">
+    Volver al listado
+  </button>
+</div>

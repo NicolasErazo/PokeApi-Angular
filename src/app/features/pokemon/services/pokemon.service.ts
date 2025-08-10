@@ -1,50 +1,99 @@
-import { Injectable, inject } from '@angular/core';
-import { Observable, forkJoin } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
-import { ApiService } from '../../../core/services/api.service';
-import { PokemonApiDetailResponse } from '../models';
 import {
   Pokemon,
-  PokemonApiResponse,
-  PokemonListItem,
+  PokemonApiDetailResponse,
   PokemonListResponse,
-} from '../models/pokemon.model';
+  PokemonListWithDetailsResponse,
+} from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
-  private readonly apiService = inject(ApiService);
-  private readonly POKEMON_ENDPOINT = 'pokemon';
+  private baseUrl = 'https://pokeapi.co/api/v2/pokemon';
 
-  getPokemons(limit = 10, offset = 0): Observable<PokemonListResponse> {
-    return this.apiService
-      .get<PokemonApiResponse>(this.POKEMON_ENDPOINT, { limit, offset })
+  private http = inject(HttpClient);
+
+  getPokemons(limit: number, offset: number) {
+    return this.http
+      .get<PokemonListResponse>(
+        `${this.baseUrl}?limit=${limit}&offset=${offset}`
+      )
       .pipe(
-        switchMap((apiResponse: PokemonApiResponse) => {
-          const requests = apiResponse.results.map(
-            (item: PokemonListItem, index: number) =>
-              this.getPokemonDetails(offset + index + 1, item.name)
+        switchMap((response) => {
+          const requests = response.results.map((item) =>
+            this.http.get<PokemonApiDetailResponse>(item.url).pipe(
+              map((details) => ({
+                id: details.id,
+                name: details.name,
+                imageUrl:
+                  details.sprites.other?.['official-artwork']?.front_default ||
+                  '',
+                types: details.types,
+              }))
+            )
           );
+
           return forkJoin(requests).pipe(
-            map((pokemons: Pokemon[]) => ({
-              count: apiResponse.count,
-              results: pokemons,
-            }))
+            map(
+              (pokemons): PokemonListWithDetailsResponse => ({
+                count: response.count,
+                results: pokemons,
+              })
+            )
           );
         })
       );
   }
 
-  private getPokemonDetails(id: number, name: string): Observable<Pokemon> {
-    return this.apiService
-      .getById<PokemonApiDetailResponse>(this.POKEMON_ENDPOINT, id)
+  // Buscar un pokemon por nombre o id
+  searchPokemon(term: string): Observable<Pokemon | null> {
+    if (!term.trim()) {
+      return of(null);
+    }
+    return this.http.get<Pokemon>(`${this.baseUrl}/${term.toLowerCase()}`).pipe(
+      catchError(() => of(null)) // Retorna null si no encuentra
+    );
+  }
+
+  getPokemonById(id: number): Observable<PokemonApiDetailResponse | null> {
+    return this.http
+      .get<PokemonApiDetailResponse>(`${this.baseUrl}/${id}`)
       .pipe(
-        map((details: PokemonApiDetailResponse) => ({
-          id: details.id,
-          name: details.name,
-          imageUrl: details.sprites.front_default,
-          types: details.types.map((t) => t.type.name),
-        }))
+        catchError(() => of(null)) // Retorna null si no encuentra
       );
+  }
+
+  getPokemonByName(name: string): Observable<Pokemon | null> {
+    return this.http.get<Pokemon>(`${this.baseUrl}/${name.toLowerCase()}`).pipe(
+      catchError(() => of(null)) // Retorna null si no encuentra
+    );
+  }
+
+  getPokemonPage(
+    page: number,
+    pageSize: number
+  ): Observable<PokemonListResponse> {
+    const offset = page * pageSize;
+    return this.http.get<PokemonListResponse>(
+      `${this.baseUrl}?limit=${pageSize}&offset=${offset}`
+    );
+  }
+
+  getPokemonByUrl(url: string): Observable<Pokemon | null> {
+    return this.http.get<Pokemon>(url).pipe(
+      catchError(() => of(null)) // Retorna null si no encuentra
+    );
+  }
+
+  getPokemonsByNames(names: string[]): Observable<Pokemon[]> {
+    const requests = names.map((name) =>
+      this.getPokemonByName(name).pipe(catchError(() => of(null)))
+    );
+    return forkJoin(requests).pipe(
+      map((pokemons) => pokemons.filter((p) => p !== null) as Pokemon[])
+    );
   }
 }

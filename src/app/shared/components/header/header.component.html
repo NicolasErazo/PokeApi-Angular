@@ -1,18 +1,22 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row class="toolbar-row">
-
     <!-- Corregido para accesibilidad -->
-    <div class="logo-container" role="button" tabindex="0" (click)="home()" (keydown.enter)="home()"
-      (keydown.space)="home()">
-      <img src="../../../assets/images/poxedex.png" alt="Pokedex" width="40" height="40" title="Home">
+    <div
+      class="logo-container"
+      role="button"
+      tabindex="0"
+      (click)="home()"
+      (keydown.enter)="home()"
+      (keydown.space)="home()"
+    >
+      <img
+        src="../../../assets/images/poxedex.png"
+        alt="Pokedex"
+        width="40"
+        height="40"
+        title="Home"
+      />
       <span class="title">PokeApi</span>
     </div>
-
-    <span class="spacer"></span>
-    &nbsp;&nbsp;
-    <button mat-raised-button color="accent" (click)="generateRandomNumber()">
-      <mat-icon>shuffle</mat-icon> Aleatorio
-    </button>
-
   </mat-toolbar-row>
 </mat-toolbar>

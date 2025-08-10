@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { PokemonCardComponent } from './components/pokemon-card/pokemon-card.component';
 import { DetailPageComponent } from './pages/detail-page/poke-detail.component';
@@ -13,11 +14,12 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
   imports: [
     CommonModule,
     HttpClientModule,
+    SharedModule,
     RouterModule.forChild([
       { path: '', component: HomePageComponent },
-      { path: 'detail/:id', component: DetailPageComponent },
+      { path: 'pokemon/:id', component: DetailPageComponent },
     ]),
   ],
-  exports: [PokemonCardComponent],
+  exports: [PokemonCardComponent, SharedModule],
 })
 export class PokemonModule {}

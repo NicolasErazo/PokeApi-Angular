@@ -1,3 +1,16 @@
+:host {
+  --border-radius: 8px;
+  --text-color: #fff;
+  --hover-color: rgba(211, 0, 75, 0.5);
+  --transition: all 0.3s ease;
+}
+
+.pokemon-container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
 /* =======================
    TABLA
 ======================= */
@@ -10,12 +23,6 @@ table {
   border-spacing: 0;
   border-radius: var(--border-radius);
   overflow: hidden;
-}
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Cabecera */
@@ -59,6 +66,8 @@ table {
 .poke-img {
   transition: var(--transition);
   border-radius: 8px;
+  width: 64px;
+  height: 64px;
   filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
   &:hover {
     transform: scale(1.1);
@@ -66,29 +75,83 @@ table {
   }
 }
 
-/* Responsive específico de la tabla */
-@media (max-width: 768px) {
-  .mat-mdc-table,
-  table {
-    font-size: 0.85rem;
-    min-width: unset; 
-  }
+/* Tipos de Pokémon */
+.pokemon-types {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
 
-  .poke-img {
-    max-width: 50px;
-    height: auto;
+.type-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: capitalize;
+
+  &.normal {
+    background-color: #a8a77a;
+  }
+  &.fire {
+    background-color: #ee8130;
+  }
+  &.water {
+    background-color: #6390f0;
+  }
+  &.electric {
+    background-color: #f7d02c;
+    color: #333;
+  }
+  &.grass {
+    background-color: #7ac74c;
+  }
+  &.ice {
+    background-color: #96d9d6;
+    color: #333;
+  }
+  &.fighting {
+    background-color: #c22e28;
+  }
+  &.poison {
+    background-color: #a33ea1;
+  }
+  &.ground {
+    background-color: #e2bf65;
+    color: #333;
+  }
+  &.flying {
+    background-color: #a98ff3;
+  }
+  &.psychic {
+    background-color: #f95587;
+  }
+  &.bug {
+    background-color: #a6b91a;
+  }
+  &.rock {
+    background-color: #b6a136;
+  }
+  &.ghost {
+    background-color: #735797;
+  }
+  &.dragon {
+    background-color: #6f35fc;
+  }
+  &.dark {
+    background-color: #705746;
+  }
+  &.steel {
+    background-color: #b7b7ce;
+    color: #333;
+  }
+  &.fairy {
+    background-color: #d685ad;
   }
 }
 
-@media (max-width: 480px) {
-  .mat-mdc-table,
-  table {
-    font-size: 0.8rem;
-  }
-  .poke-img {
-    max-width: 60px;
-    height: auto;
-  }
+.white-icon-btn {
+  color: white;
 }
 
 /* =======================
@@ -104,8 +167,6 @@ table {
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
-/* Iconos y textos */
-/* Quitar fondo y borde del selector en el paginador */
 ::ng-deep .mat-mdc-paginator .mat-mdc-form-field-flex {
   background: transparent !important;
   box-shadow: none !important;
@@ -115,24 +176,28 @@ table {
   background: transparent !important;
 }
 
-::ng-deep .mat-mdc-paginator .mat-mdc-select-value {
-  color: var(--text-color) !important;
-}
-
+::ng-deep .mat-mdc-paginator .mat-mdc-select-value,
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-arrow {
   color: var(--text-color) !important;
 }
 
 /* =======================
-   FILTRO DE BÚSQUEDA (Forzado)
+   FILTRO DE BÚSQUEDA
 ======================= */
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.search-container input.mat-mdc-input-element {
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+}
+
 ::ng-deep input.mat-mdc-input-element {
-  background: rgba(
-    255,
-    255,
-    255,
-    0.1
-  ) !important; /* Fondo translúcido oscuro */
+  background: rgba(255, 255, 255, 0.1) !important;
   color: var(--text-color) !important;
   font-weight: bold;
   border-radius: var(--border-radius);
@@ -167,4 +232,31 @@ table {
 
 ::ng-deep .mat-mdc-option:hover {
   background: var(--hover-color) !important;
+}
+
+/* =======================
+   RESPONSIVE
+======================= */
+@media (max-width: 768px) {
+  .mat-mdc-table,
+  table {
+    font-size: 0.85rem;
+    min-width: unset;
+  }
+
+  .poke-img {
+    max-width: 50px;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .mat-mdc-table,
+  table {
+    font-size: 0.8rem;
+  }
+  .poke-img {
+    max-width: 60px;
+    height: auto;
+  }
 }

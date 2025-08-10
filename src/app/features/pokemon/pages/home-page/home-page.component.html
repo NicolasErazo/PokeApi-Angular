@@ -1,119 +1,81 @@
 <div class="pokemon-container">
-  <!-- Filtro con autocompletado -->
+  <!-- Filtro de Busqueda-->
   <div class="search-container">
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Buscar Pokémon (nombre o ID)</mat-label>
-      <input
-        type="text"
-        matInput
-        [formControl]="searchControl"
-        [matAutocomplete]="auto"
-        aria-label="Buscar Pokémon"
-      />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+    <button
+      mat-icon-button
+      class="white-icon-btn"
+      (click)="generateRandomNumber()"
+      aria-label="Generar Pokémon aleatorio"
+    >
+      <mat-icon>shuffle</mat-icon>
+    </button>
 
+    <input
+      type="text"
+      matInput
+      [formControl]="pokemonCtrl"
+      [matAutocomplete]="auto"
+      placeholder="Ej: pikachu o 25"
+    />
     <mat-autocomplete
       #auto="matAutocomplete"
-      (optionSelected)="onPokemonSelected($event)"
+      (optionSelected)="onOptionSelected($event)"
     >
-      <mat-option
-        *ngFor="let pokemon of filteredOptions | async"
-        [value]="pokemon.name"
-      >
-        <div class="autocomplete-option">
-          <img
-            [src]="pokemon.imageUrl"
-            [alt]="pokemon.name"
-            class="autocomplete-image"
-          />
-          <span>{{ pokemon.name | titlecase }} (#{{ pokemon.id }})</span>
-        </div>
+      <mat-option *ngFor="let name of filteredPokemonNames" [value]="name">
+        {{ name }}
       </mat-option>
     </mat-autocomplete>
   </div>
 
-  <!-- Tabla de Pokémon -->
-  <div class="table-container mat-elevation-z8">
-    <table
-      mat-table
-      [dataSource]="dataSource"
-      matSort
-      class="pokemon-table"
-      aria-label="Tabla de Pokémon"
-    >
-      <!-- Columna ID -->
+  <!-- Tabla -->
+  <div class="table-responsive">
+    <table mat-table [dataSource]="pokemons" class="mat-elevation-z8">
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
-        <td mat-cell *matCellDef="let pokemon">{{ pokemon.id }}</td>
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let p">{{ p.id }}</td>
       </ng-container>
 
-      <!-- Columna Imagen -->
       <ng-container matColumnDef="image">
         <th mat-header-cell *matHeaderCellDef>Imagen</th>
-        <td mat-cell *matCellDef="let pokemon">
-          <img
-            [src]="pokemon.imageUrl"
-            [alt]="pokemon.name"
-            width="64"
-            height="64"
-            class="pokemon-image"
-          />
+        <td mat-cell *matCellDef="let p">
+          <img class="poke-img" [src]="p.imageUrl" [alt]="p.name" />
         </td>
       </ng-container>
 
-      <!-- Columna Nombre -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-        <td mat-cell *matCellDef="let pokemon">
-          {{ pokemon.name | titlecase }}
-        </td>
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let p">{{ p.name | titlecase }}</td>
       </ng-container>
 
-      <!-- Columna Tipos -->
       <ng-container matColumnDef="types">
         <th mat-header-cell *matHeaderCellDef>Tipos</th>
-        <td mat-cell *matCellDef="let pokemon">
+        <td mat-cell *matCellDef="let p">
           <div class="pokemon-types">
             <span
-              *ngFor="let type of pokemon.types"
-              class="type-badge"
-              [class]="'type-' + type.toLowerCase()"
+              *ngFor="let t of p.types"
+              class="type-badge {{ t.type.name }}"
             >
-              {{ type | uppercase }}
+              {{ t.type.name | uppercase }}
             </span>
           </div>
         </td>
       </ng-container>
 
-      <!-- Cabecera y filas -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr
         mat-row
         *matRowDef="let row; columns: displayedColumns"
         (click)="viewPokemonDetail(row)"
-        [attr.aria-label]="'Ver detalles de ' + row.name"
-        tabindex="0"
-        role="button"
       ></tr>
-
-      <!-- Fila vacía -->
-      <tr class="mat-row" *matNoDataRow>
-        <td class="no-results" colspan="4">
-          No se encontraron Pokémon para "{{ searchControl.value }}"
-        </td>
-      </tr>
     </table>
   </div>
 
-  <!-- Paginación -->
+  <!-- Paginador -->
   <mat-paginator
     [length]="totalPokemons"
     [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 20, 50]"
     (page)="onPageChange($event)"
     showFirstLastButtons
-    aria-label="Seleccionar página de Pokémon"
-  >
-  </mat-paginator>
+  ></mat-paginator>
 </div>

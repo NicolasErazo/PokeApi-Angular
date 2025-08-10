@@ -1,11 +1,12 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { PokemonDetail } from '../../models/pokemon-detail.model';
 import { PokemonService } from '../../services/pokemon.service';
+import { PokemonApiDetailResponse } from '../../models';
 
 @Component({
-  selector: 'app-pokemon-detail',
+  selector: 'app-poke-detail',
   templateUrl: './poke-detail.component.html',
   styleUrls: ['./poke-detail.component.scss'],
 })
@@ -14,56 +15,74 @@ export class DetailPageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly pokemonService = inject(PokemonService);
 
-  pokemon!: PokemonDetail;
+  pokemon?: PokemonApiDetailResponse;
   loading = true;
-  error: string | null = null;
+
+  // Propiedades para las imágenes
+  pokemonImgFront = '';
+  pokemonImgShiny = '';
+  pokemonImgOfficial = '';
 
   ngOnInit(): void {
-    this.loadPokemon();
-  }
-
-  private loadPokemon(): void {
-    const pokemonId = this.route.snapshot.paramMap.get('id');
-
-    if (!pokemonId) {
-      this.error = 'No Pokémon ID provided';
-      this.loading = false;
-      return;
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.loadPokemon(+id);
     }
-
-    this.pokemonService.getPokemonById(+pokemonId).subscribe({
-      next: (pokemon) => {
-        this.pokemon = pokemon;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Failed to load Pokémon details';
-        this.loading = false;
-        console.error(err);
-      },
-    });
   }
 
-  // Helpers para la vista
-  get pokemonImage(): string {
-    return (
-      this.pokemon?.sprites?.other?.['official-artwork']?.front_default || ''
+  loadPokemon(id: number): void {
+    this.loading = true;
+    this.pokemonService.getPokemonById(id).subscribe(
+      (pokemon) => {
+        if (pokemon) {
+          this.pokemon = pokemon;
+          this.setPokemonImages();
+        } else {
+          this.pokemon = undefined;
+        }
+        this.loading = false;
+      },
+      (err: Error | HttpErrorResponse) => {
+        console.error('Error loading Pokémon', err);
+        this.loading = false;
+      }
     );
   }
 
-  get pokemonTypes(): string[] {
-    return this.pokemon?.types?.map((t) => t.type.name) || [];
+  private setPokemonImages(): void {
+    if (!this.pokemon) return;
+
+    // Imagen frontal por defecto
+    this.pokemonImgFront =
+      this.pokemon.sprites.front_default || 'assets/pokemon-placeholder.png';
+
+    // Imagen shiny (si existe)
+    this.pokemonImgShiny =
+      this.pokemon.sprites.front_shiny ||
+      this.pokemon.sprites.other?.home?.front_shiny ||
+      '';
+
+    // Imagen oficial (si existe)
+    this.pokemonImgOfficial =
+      this.pokemon.sprites.other?.['official-artwork']?.front_default ||
+      this.pokemonImgFront;
   }
 
-  get formattedWeight(): string {
-    return this.pokemon ? `${(this.pokemon.weight / 10).toFixed(1)} kg` : '';
+  goBack(): void {
+    this.router.navigate(['/']);
   }
 
-  get formattedHeight(): string {
-    return this.pokemon ? `${(this.pokemon.height / 10).toFixed(1)} m` : '';
+  getWeight(): string {
+    return this.pokemon ? `${(this.pokemon.weight / 10).toFixed(1)} kg` : 'N/A';
   }
 
-  navigateBack(): void {
-    this.router.navigate(['/pokemon']);
+  getHeight(): string {
+    return this.pokemon ? `${(this.pokemon.height / 10).toFixed(1)} m` : 'N/A';
+  }
+
+  getStatValue(statName: string): number {
+    if (!this.pokemon) return 0;
+    const stat = this.pokemon.stats.find((s) => s.stat.name === statName);
+    return stat ? stat.base_stat : 0;
   }
 }

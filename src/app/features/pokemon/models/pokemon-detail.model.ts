@@ -1,12 +1,13 @@
-export interface PokemonDetail {
+export interface PokemonApiDetailResponse {
   id: number;
   name: string;
   height: number;
   weight: number;
   sprites: {
     front_default: string;
-    other: {
-      'official-artwork': {
+    front_shiny?: string;
+    other?: {
+      'official-artwork'?: {
         front_default: string;
       };
       home?: {
@@ -29,16 +30,8 @@ export interface PokemonDetail {
       url: string;
     };
   }[];
-}
-
-export interface PokemonApiDetailResponse {
-  id: number;
-  name: string;
-  sprites: {
-    front_default: string;
-  };
-  types: {
-    type: {
+  abilities?: {
+    ability: {
       name: string;
     };
   }[];

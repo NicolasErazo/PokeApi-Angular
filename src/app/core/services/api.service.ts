@@ -11,7 +11,10 @@ export class ApiService {
   private readonly API_URL = environment.apiUrl;
   private http = inject(HttpClient);
 
-  get<T>(endpoint: string, params?: any): Observable<T> {
+  get<T>(
+    endpoint: string,
+    params?: Record<string, string | number | boolean>
+  ): Observable<T> {
     return this.http.get<T>(`${this.API_URL}/${endpoint}`, { params });
   }
 

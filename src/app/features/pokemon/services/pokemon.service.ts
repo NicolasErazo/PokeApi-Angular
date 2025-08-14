@@ -16,6 +16,13 @@ export class PokemonService {
 
   private http = inject(HttpClient);
 
+  getTotalPokemons(): Observable<number> {
+    return this.http.get<PokemonListResponse>(`${this.baseUrl}?limit=1`).pipe(
+      map((response) => response.count),
+      catchError(() => of(0)) // Si falla, devolvemos 0
+    );
+  }
+
   getPokemons(limit: number, offset: number) {
     return this.http
       .get<PokemonListResponse>(
@@ -72,13 +79,9 @@ export class PokemonService {
     );
   }
 
-  getPokemonPage(
-    page: number,
-    pageSize: number
-  ): Observable<PokemonListResponse> {
-    const offset = page * pageSize;
+  getPokemonPage(limit: number, offset: number) {
     return this.http.get<PokemonListResponse>(
-      `${this.baseUrl}?limit=${pageSize}&offset=${offset}`
+      `${this.baseUrl}?limit=${limit}&offset=${offset}`
     );
   }
 

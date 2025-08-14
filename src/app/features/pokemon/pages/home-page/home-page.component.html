@@ -9,7 +9,7 @@
     >
       <mat-icon>shuffle</mat-icon>
     </button>
-
+    &nbsp;&nbsp;
     <input
       type="text"
       matInput
@@ -38,7 +38,14 @@
       <ng-container matColumnDef="image">
         <th mat-header-cell *matHeaderCellDef>Imagen</th>
         <td mat-cell *matCellDef="let p">
-          <img class="poke-img" [src]="p.imageUrl" [alt]="p.name" />
+          <img
+            class="poke-img"
+            [src]="p.imageUrl"
+            [alt]="p.name"
+            width="40"
+            height="40"
+            onerror="this.src='assets/images/pikachuIncognito.png'"
+          />
         </td>
       </ng-container>
 

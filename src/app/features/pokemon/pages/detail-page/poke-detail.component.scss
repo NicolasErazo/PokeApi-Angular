@@ -171,34 +171,70 @@ mat-chip-listbox {
   background: linear-gradient(90deg, #ff9a9e, #fecfef);
 }
 
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px; /* Espacio entre botones */
+  margin-bottom: 1rem;
+}
+
 .back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 20px;
-  border-radius: 30px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: none;
   background: linear-gradient(90deg, #ff0080, #7928ca);
   color: white;
-  font-family: "Poppins", sans-serif;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   mat-icon {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(90deg, #ff4fa2, #9250d9);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
   }
+}
 
-  &:active {
-    transform: scale(0.97);
-  }
+/* Contenedor de carga */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  gap: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+/* Contenedor de error */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  gap: 1rem; /* Más espacio entre elementos */
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.error-container mat-icon:first-child {
+  font-size: 64px; /* Más grande */
+  color: #ff5252;
+  margin-bottom: 0.5rem;
+}
+
+/* Botón en error reutiliza el estilo .back-button */
+.error-container .back-button {
+  margin-top: 0.8rem;
 }

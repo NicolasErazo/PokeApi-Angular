@@ -9,6 +9,7 @@ export interface PokemonApiDetailResponse {
     other?: {
       'official-artwork'?: {
         front_default: string;
+        front_shiny?: string; // ← Agregada para shiny HD
       };
       home?: {
         front_shiny?: string;

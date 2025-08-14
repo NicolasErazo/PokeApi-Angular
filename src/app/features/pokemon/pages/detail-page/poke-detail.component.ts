@@ -2,8 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { PokemonService } from '../../services/pokemon.service';
 import { PokemonApiDetailResponse } from '../../models';
+import { PokemonService } from '../../services/pokemon.service';
 
 @Component({
   selector: 'app-poke-detail',
@@ -23,11 +23,23 @@ export class DetailPageComponent implements OnInit {
   pokemonImgShiny = '';
   pokemonImgOfficial = '';
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.loadPokemon(+id);
-    }
+  totalPokemons = 0;
+
+  randomNumber = 0;
+
+  ngOnInit() {
+    // Obtener total de pokémon
+    this.pokemonService.getTotalPokemons().subscribe((count) => {
+      this.totalPokemons = count;
+    });
+
+    // Escuchar cambios de ID en la ruta
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.loadPokemon(+id);
+      }
+    });
   }
 
   loadPokemon(id: number): void {
@@ -52,20 +64,11 @@ export class DetailPageComponent implements OnInit {
   private setPokemonImages(): void {
     if (!this.pokemon) return;
 
-    // Imagen frontal por defecto
     this.pokemonImgFront =
-      this.pokemon.sprites.front_default || 'assets/pokemon-placeholder.png';
+      this.pokemon.sprites.other?.['official-artwork']?.front_default || '';
 
-    // Imagen shiny (si existe)
     this.pokemonImgShiny =
-      this.pokemon.sprites.front_shiny ||
-      this.pokemon.sprites.other?.home?.front_shiny ||
-      '';
-
-    // Imagen oficial (si existe)
-    this.pokemonImgOfficial =
-      this.pokemon.sprites.other?.['official-artwork']?.front_default ||
-      this.pokemonImgFront;
+      this.pokemon.sprites.other?.['official-artwork']?.front_shiny || '';
   }
 
   goBack(): void {
@@ -84,5 +87,12 @@ export class DetailPageComponent implements OnInit {
     if (!this.pokemon) return 0;
     const stat = this.pokemon.stats.find((s) => s.stat.name === statName);
     return stat ? stat.base_stat : 0;
+  }
+
+  shuffle() {
+    if (this.totalPokemons > 0) {
+      this.randomNumber = Math.floor(Math.random() * this.totalPokemons) + 1;
+      this.router.navigateByUrl(`/pokemon/${this.randomNumber}`);
+    }
   }
 }

@@ -3,10 +3,17 @@
   *ngIf="pokemon && !loading"
   [ngClass]="'bg-' + pokemon.types[0].type.name"
 >
-  <!-- Botón de volver -->
-  <button mat-button class="back-button" (click)="goBack()">
-    <mat-icon>arrow_back</mat-icon> Volver
-  </button>
+  <div class="button-container">
+    <!-- Botón de volver -->
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    &nbsp;
+    <!-- Botón de shuffle -->
+    <button mat-icon-button class="back-button" (click)="shuffle()">
+      <mat-icon>shuffle</mat-icon>
+    </button>
+  </div>
 
   <!-- Encabezado -->
   <mat-card-header>
@@ -20,15 +27,6 @@
   <mat-card-content>
     <!-- Pestañas de imágenes -->
     <mat-tab-group animationDuration="500ms" class="img-tabs">
-      <mat-tab label="Oficial">
-        <img
-          class="poke-img"
-          [src]="pokemonImgOfficial"
-          [alt]="pokemon.name"
-          onerror="this.src='assets/pokemon-placeholder.png'"
-        />
-      </mat-tab>
-
       <mat-tab label="Normal" *ngIf="pokemonImgFront">
         <img
           class="poke-img"
@@ -105,7 +103,16 @@
 <div *ngIf="!pokemon && !loading" class="error-container">
   <mat-icon>error_outline</mat-icon>
   <p>No se pudo cargar la información del Pokémon</p>
-  <button mat-raised-button color="primary" (click)="goBack()">
-    Volver al listado
-  </button>
+
+  <div class="button-container">
+    <!-- Botón de volver -->
+    <button mat-icon-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    &nbsp;
+    <!-- Botón de shuffle -->
+    <button mat-icon-button class="back-button" (click)="shuffle()">
+      <mat-icon>shuffle</mat-icon>
+    </button>
+  </div>
 </div>

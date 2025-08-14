@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { debounceTime } from 'rxjs';
+import { debounceTime, forkJoin } from 'rxjs';
 
 import {
   Pokemon,
@@ -27,7 +27,7 @@ export class HomePageComponent implements OnInit {
 
   // Autocomplete
   pokemonCtrl = new FormControl('', [
-    Validators.pattern(/^(?!-)\d*$|^[a-zA-Z]+$/),
+    Validators.pattern(/^(?!-)\d*$|^[a-zA-Z-]+$/),
   ]);
   allPokemonNames: string[] = [];
   filteredPokemonNames: string[] = [];
@@ -60,73 +60,78 @@ export class HomePageComponent implements OnInit {
       // Si está vacío → recargar lista completa
       if (!val) {
         this.loadPokemons();
+        this.filteredPokemonNames = [];
         return;
       }
 
       const id = parseInt(val, 10);
       if (!isNaN(id) && id > 0) {
         // Buscar por ID
-        this.pokemonService.getPokemonById(id).subscribe(
-          (pokemon) => {
-            if (pokemon !== null) {
-              this.pokemons = [
-                {
-                  id: pokemon.id,
-                  name: pokemon.name,
-                  imageUrl:
-                    pokemon.sprites.other?.['official-artwork']
-                      ?.front_default ?? '',
-                  types: pokemon.types,
-                },
-              ];
-            } else {
-              this.pokemons = [];
-            }
-          },
-          () => (this.pokemons = [])
-        );
+        this.searchPokemonById(id);
       } else {
-        // Filtrar nombres para el autocomplete
-        this.filteredPokemonNames = this.allPokemonNames.filter((name) =>
-          name.includes(val)
-        );
+        // Buscar por nombre
+        this.searchPokemonByName(val);
+      }
+    });
+  }
 
-        // Si el valor escrito es un nombre exacto, buscar solo ese
-        if (this.allPokemonNames.includes(val)) {
-          this.pokemonService.getPokemonByName(val).subscribe(
-            (pokemon) => {
-              if (pokemon) {
-                this.pokemons = [pokemon];
-              } else {
-                this.pokemons = [];
-              }
-            },
-            () => (this.pokemons = [])
-          );
-        }
-        // Si no es exacto pero hay coincidencias parciales, traerlos todos
-        else if (this.filteredPokemonNames.length > 0) {
-          this.pokemonService
-            .getPokemonsByNames(this.filteredPokemonNames)
-            .subscribe(
-              (pokemons) => {
-                this.pokemons = pokemons.map((p) => p);
-              },
-              () => (this.pokemons = [])
-            );
+  private searchPokemonById(id: number): void {
+    this.pokemonService.getPokemonById(id).subscribe({
+      next: (pokemon) => {
+        if (pokemon) {
+          this.pokemons = [this.adaptFromApi(pokemon)];
         } else {
           this.pokemons = [];
         }
-      }
+        this.filteredPokemonNames = [];
+      },
+      error: () => {
+        this.pokemons = [];
+        this.filteredPokemonNames = [];
+      },
     });
+  }
+
+  private searchPokemonByName(searchTerm: string): void {
+    // Filtrar nombres para el autocomplete
+    this.filteredPokemonNames = this.allPokemonNames
+      .filter((name) => name.includes(searchTerm))
+      .slice(0, 10); // Limitar a 10 resultados para mejor rendimiento
+
+    // Si el valor escrito es un nombre exacto
+    if (this.allPokemonNames.includes(searchTerm)) {
+      this.pokemonService.getPokemonByName(searchTerm).subscribe({
+        next: (pokemon) => {
+          if (pokemon) {
+            this.pokemons = [this.adaptFromApi(pokemon)];
+          } else {
+            this.pokemons = [];
+          }
+        },
+        error: () => (this.pokemons = []),
+      });
+    }
+    // Si hay coincidencias parciales, mostrar las primeras 20
+    else if (this.filteredPokemonNames.length > 0) {
+      const pokemonsToLoad = this.filteredPokemonNames.slice(0, 20);
+
+      this.pokemonService.getPokemonsByNames(pokemonsToLoad).subscribe({
+        next: (pokemons) => {
+          this.pokemons = pokemons.map((p) => this.adaptFromApi(p));
+        },
+        error: () => (this.pokemons = []),
+      });
+    } else {
+      this.pokemons = [];
+    }
   }
 
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
     const name = event.option.value;
     this.pokemonService.getPokemonByName(name).subscribe(
       (pokemon) => {
-        if (pokemon !== null) {
-          this.pokemons = [pokemon];
+        if (pokemon) {
+          this.pokemons = [this.adaptFromApi(pokemon)];
         } else {
           this.pokemons = [];
         }
@@ -135,20 +140,52 @@ export class HomePageComponent implements OnInit {
     );
   }
 
+  loadingNames = true;
   loadAllPokemonNames(): void {
-    // Paso 1: obtener el total de pokémon
+    // Cargar todos los pokémon de una vez (la API soporta hasta 100,000)
+    this.pokemonService.getPokemonPage(100000, 0).subscribe({
+      next: (response) => {
+        this.allPokemonNames = response.results.map((p: PokemonListItem) =>
+          p.name.toLowerCase()
+        );
+        console.log(
+          `Cargados ${this.allPokemonNames.length} nombres de pokémon`
+        );
+      },
+      error: (err) => {
+        console.error('Error loading all names', err);
+        // Fallback: cargar por páginas si falla
+        this.loadAllPokemonNamesInBatches();
+      },
+    });
+  }
+
+  // Método alternativo por si el anterior falla
+  private loadAllPokemonNamesInBatches(): void {
     this.pokemonService.getPokemonPage(1, 0).subscribe({
       next: (firstResponse) => {
         const total = firstResponse.count;
+        const pageSize = 1000; // Aumentar el tamaño de página
+        const totalPages = Math.ceil(total / pageSize);
+        const requests = [];
 
-        // Paso 2: obtener todos con el total
-        this.pokemonService.getPokemonPage(total, 0).subscribe({
-          next: (fullResponse: PokemonListResponse) => {
-            this.allPokemonNames = fullResponse.results.map(
-              (p: PokemonListItem) => p.name
+        for (let i = 0; i < totalPages; i++) {
+          requests.push(
+            this.pokemonService.getPokemonPage(pageSize, i * pageSize)
+          );
+        }
+
+        forkJoin(requests).subscribe({
+          next: (responses: PokemonListResponse[]) => {
+            this.allPokemonNames = responses.flatMap((r) =>
+              r.results.map((p: PokemonListItem) => p.name.toLowerCase())
+            );
+            console.log(
+              `Cargados ${this.allPokemonNames.length} nombres de pokémon`
             );
           },
-          error: (err) => console.error('Error loading all names', err),
+          error: (err) =>
+            console.error('Error loading all names in batches', err),
         });
       },
       error: (err) => console.error('Error getting total count', err),
@@ -161,9 +198,23 @@ export class HomePageComponent implements OnInit {
       .getPokemons(this.pageSize, this.pageIndex * this.pageSize)
       .subscribe({
         next: (response) => {
-          this.pokemons = response.results;
           this.totalPokemons = response.count;
-          this.loading = false;
+
+          // Traer detalles de cada Pokémon
+          const requests = response.results.map((p) =>
+            this.pokemonService.getPokemonByName(p.name)
+          );
+
+          forkJoin(requests).subscribe({
+            next: (pokemons) => {
+              this.pokemons = pokemons.map((p) => this.adaptFromApi(p));
+              this.loading = false;
+            },
+            error: () => {
+              this.error = 'No se pudieron cargar los Pokémon';
+              this.loading = false;
+            },
+          });
         },
         error: () => {
           this.error = 'No se pudieron cargar los Pokémon';
@@ -187,5 +238,16 @@ export class HomePageComponent implements OnInit {
       this.randomNumber = Math.floor(Math.random() * this.totalPokemons) + 1;
       this.router.navigateByUrl(`/pokemon/${this.randomNumber}`);
     }
+  }
+
+  // TODO: Tipar correctamente este método en vez de `any`.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private adaptFromApi(p: any): Pokemon {
+    return {
+      id: p.id,
+      name: p.name,
+      imageUrl: p.sprites.other?.['official-artwork']?.front_default ?? '',
+      types: p.types,
+    };
   }
 }

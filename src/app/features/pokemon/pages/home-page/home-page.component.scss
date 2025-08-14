@@ -11,11 +11,8 @@
   margin: auto;
 }
 
-/* =======================
-   TABLA
-======================= */
-.mat-mdc-table,
-table {
+table,
+.mat-mdc-table {
   width: 100%;
   background: transparent;
   margin: 1rem 0;
@@ -75,7 +72,7 @@ table {
   }
 }
 
-/* Tipos de Pokémon */
+/* Tipos */
 .pokemon-types {
   display: flex;
   gap: 0.5rem;
@@ -89,74 +86,73 @@ table {
   font-size: 0.8rem;
   font-weight: bold;
   text-transform: capitalize;
+}
 
-  &.normal {
-    background-color: #a8a77a;
-  }
-  &.fire {
-    background-color: #ee8130;
-  }
-  &.water {
-    background-color: #6390f0;
-  }
-  &.electric {
-    background-color: #f7d02c;
-    color: #333;
-  }
-  &.grass {
-    background-color: #7ac74c;
-  }
-  &.ice {
-    background-color: #96d9d6;
-    color: #333;
-  }
-  &.fighting {
-    background-color: #c22e28;
-  }
-  &.poison {
-    background-color: #a33ea1;
-  }
-  &.ground {
-    background-color: #e2bf65;
-    color: #333;
-  }
-  &.flying {
-    background-color: #a98ff3;
-  }
-  &.psychic {
-    background-color: #f95587;
-  }
-  &.bug {
-    background-color: #a6b91a;
-  }
-  &.rock {
-    background-color: #b6a136;
-  }
-  &.ghost {
-    background-color: #735797;
-  }
-  &.dragon {
-    background-color: #6f35fc;
-  }
-  &.dark {
-    background-color: #705746;
-  }
-  &.steel {
-    background-color: #b7b7ce;
-    color: #333;
-  }
-  &.fairy {
-    background-color: #d685ad;
-  }
+.type-badge.normal {
+  background: #a8a77a;
+}
+.type-badge.fire {
+  background: #ee8130;
+}
+.type-badge.water {
+  background: #6390f0;
+}
+.type-badge.electric {
+  background: #f7d02c;
+  color: #333;
+}
+.type-badge.grass {
+  background: #7ac74c;
+}
+.type-badge.ice {
+  background: #96d9d6;
+  color: #333;
+}
+.type-badge.fighting {
+  background: #c22e28;
+}
+.type-badge.poison {
+  background: #a33ea1;
+}
+.type-badge.ground {
+  background: #e2bf65;
+  color: #333;
+}
+.type-badge.flying {
+  background: #a98ff3;
+}
+.type-badge.psychic {
+  background: #f95587;
+}
+.type-badge.bug {
+  background: #a6b91a;
+}
+.type-badge.rock {
+  background: #b6a136;
+}
+.type-badge.ghost {
+  background: #735797;
+}
+.type-badge.dragon {
+  background: #6f35fc;
+}
+.type-badge.dark {
+  background: #705746;
+}
+.type-badge.steel {
+  background: #b7b7ce;
+  color: #333;
+}
+.type-badge.fairy {
+  background: #d685ad;
 }
 
 .white-icon-btn {
   color: white;
+  background: linear-gradient(90deg, #ff0080, #7928ca);
 }
 
-/* =======================
-   PAGINACIÓN CON GRADIENTE
-======================= */
+/* Paginación */
 ::ng-deep .mat-mdc-paginator {
   background: linear-gradient(
     to bottom,
@@ -167,23 +163,23 @@ table {
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
-::ng-deep .mat-mdc-paginator .mat-mdc-form-field-flex {
+::ng-deep .mat-mdc-paginator .mat-mdc-form-field-flex,
+::ng-deep .mat-mdc-paginator .mat-mdc-select-trigger {
   background: transparent !important;
   box-shadow: none !important;
 }
 
-::ng-deep .mat-mdc-paginator .mat-mdc-select-trigger {
-  background: transparent !important;
-}
-
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-value,
-::ng-deep .mat-mdc-paginator .mat-mdc-select-arrow {
+::ng-deep .mat-mdc-paginator .mat-mdc-select-arrow,
+::ng-deep .mat-mdc-option {
   color: var(--text-color) !important;
 }
 
-/* =======================
-   FILTRO DE BÚSQUEDA
-======================= */
+::ng-deep .mat-mdc-option:hover {
+  background: var(--hover-color) !important;
+}
+
+/* Búsqueda */
 .search-container {
   display: flex;
   justify-content: center;
@@ -196,17 +192,16 @@ table {
   text-align: center;
 }
 
-::ng-deep input.mat-mdc-input-element {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: var(--text-color) !important;
-  font-weight: bold;
-  border-radius: var(--border-radius);
-  padding: 8px 12px;
-}
-
+::ng-deep input.mat-mdc-input-element,
 ::ng-deep .mat-mdc-form-field-flex {
   background: rgba(255, 255, 255, 0.1) !important;
   border-radius: var(--border-radius);
+}
+
+::ng-deep input.mat-mdc-input-element {
+  color: var(--text-color) !important;
+  font-weight: bold;
+  padding: 8px 12px;
 }
 
 ::ng-deep .mat-mdc-form-field-label {
@@ -217,33 +212,12 @@ table {
   background-color: var(--hover-color) !important;
 }
 
-/* =======================
-   AUTOCOMPLETE PANEL
-======================= */
-::ng-deep .mat-mdc-autocomplete-panel {
-  background: rgba(211, 0, 75, 0.9) !important;
-  color: var(--text-color) !important;
-  border-radius: var(--border-radius);
-}
-
-::ng-deep .mat-mdc-option {
-  color: var(--text-color) !important;
-}
-
-::ng-deep .mat-mdc-option:hover {
-  background: var(--hover-color) !important;
-}
-
-/* =======================
-   RESPONSIVE
-======================= */
+/* Responsive */
 @media (max-width: 768px) {
-  .mat-mdc-table,
-  table {
+  table,
+  .mat-mdc-table {
     font-size: 0.85rem;
-    min-width: unset;
   }
-
   .poke-img {
     max-width: 50px;
     height: auto;
@@ -251,8 +225,8 @@ table {
 }
 
 @media (max-width: 480px) {
-  .mat-mdc-table,
-  table {
+  table,
+  .mat-mdc-table {
     font-size: 0.8rem;
   }
   .poke-img {

@@ -7,6 +7,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/pokemon/pokemon.module').then((m) => m.PokemonModule),
   },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

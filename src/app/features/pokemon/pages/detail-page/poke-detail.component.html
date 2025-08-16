@@ -26,25 +26,28 @@
   <!-- Contenido -->
   <mat-card-content>
     <!-- Pestañas de imágenes -->
-    <mat-tab-group animationDuration="500ms" class="img-tabs">
-      <mat-tab label="Normal" *ngIf="pokemonImgFront">
-        <img
-          class="poke-img"
-          [src]="pokemonImgFront"
-          [alt]="pokemon.name"
-          onerror="this.src='assets/pokemon-placeholder.png'"
-        />
-      </mat-tab>
+    <ng-container *ngIf="pokemonImgFront || pokemonImgShiny; else noImage">
+      <mat-tab-group animationDuration="500ms" class="img-tabs">
+        <mat-tab label="Normal" *ngIf="pokemonImgFront">
+          <img class="poke-img" [src]="pokemonImgFront" [alt]="pokemon.name" />
+        </mat-tab>
 
-      <mat-tab label="Shiny" *ngIf="pokemonImgShiny">
-        <img
-          class="poke-img"
-          [src]="pokemonImgShiny"
-          [alt]="pokemon.name + ' Shiny'"
-          onerror="this.src='assets/pokemon-placeholder.png'"
-        />
-      </mat-tab>
-    </mat-tab-group>
+        <mat-tab label="Shiny" *ngIf="pokemonImgShiny">
+          <img
+            class="poke-img"
+            [src]="pokemonImgShiny"
+            [alt]="pokemon.name + ' Shiny'"
+          />
+        </mat-tab>
+      </mat-tab-group>
+    </ng-container>
+
+    <ng-template #noImage>
+      <div class="error-container">
+        <mat-icon>image_not_supported</mat-icon>
+        <p>No se encontró imagen</p>
+      </div>
+    </ng-template>
 
     <!-- Tipos -->
     <div class="section type-container">

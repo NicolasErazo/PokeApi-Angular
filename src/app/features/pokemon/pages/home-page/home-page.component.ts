@@ -1,7 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { debounceTime, forkJoin } from 'rxjs';
 
@@ -18,12 +20,14 @@ import { PokemonService } from '../../services/pokemon.service';
   styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent implements OnInit {
+  @ViewChild(MatSort) sort!: MatSort;
+
   private readonly pokemonService = inject(PokemonService);
   private readonly router = inject(Router);
 
   // Tabla
   displayedColumns: string[] = ['id', 'image', 'name', 'types'];
-  pokemons: Pokemon[] = [];
+  pokemons = new MatTableDataSource<Pokemon>();
 
   // Autocomplete
   pokemonCtrl = new FormControl('', [
@@ -78,51 +82,48 @@ export class HomePageComponent implements OnInit {
   private searchPokemonById(id: number): void {
     this.pokemonService.getPokemonById(id).subscribe({
       next: (pokemon) => {
-        if (pokemon) {
-          this.pokemons = [this.adaptFromApi(pokemon)];
-        } else {
-          this.pokemons = [];
-        }
+        const result = pokemon ? [this.adaptFromApi(pokemon)] : [];
+        this.pokemons = new MatTableDataSource(result);
+        this.pokemons.sort = this.sort;
         this.filteredPokemonNames = [];
       },
       error: () => {
-        this.pokemons = [];
+        this.pokemons = new MatTableDataSource<Pokemon>([]);
         this.filteredPokemonNames = [];
       },
     });
   }
 
   private searchPokemonByName(searchTerm: string): void {
-    // Filtrar nombres para el autocomplete
     this.filteredPokemonNames = this.allPokemonNames
       .filter((name) => name.includes(searchTerm))
-      .slice(0, 10); // Limitar a 10 resultados para mejor rendimiento
+      .slice(0, 10);
 
-    // Si el valor escrito es un nombre exacto
     if (this.allPokemonNames.includes(searchTerm)) {
       this.pokemonService.getPokemonByName(searchTerm).subscribe({
         next: (pokemon) => {
-          if (pokemon) {
-            this.pokemons = [this.adaptFromApi(pokemon)];
-          } else {
-            this.pokemons = [];
-          }
+          const result = pokemon ? [this.adaptFromApi(pokemon)] : [];
+          this.pokemons = new MatTableDataSource(result);
+          this.pokemons.sort = this.sort;
         },
-        error: () => (this.pokemons = []),
+        error: () => {
+          this.pokemons = new MatTableDataSource<Pokemon>([]);
+        },
       });
-    }
-    // Si hay coincidencias parciales, mostrar las primeras 20
-    else if (this.filteredPokemonNames.length > 0) {
+    } else if (this.filteredPokemonNames.length > 0) {
       const pokemonsToLoad = this.filteredPokemonNames.slice(0, 20);
-
       this.pokemonService.getPokemonsByNames(pokemonsToLoad).subscribe({
         next: (pokemons) => {
-          this.pokemons = pokemons.map((p) => this.adaptFromApi(p));
+          const result = pokemons.map((p) => this.adaptFromApi(p));
+          this.pokemons = new MatTableDataSource(result);
+          this.pokemons.sort = this.sort;
         },
-        error: () => (this.pokemons = []),
+        error: () => {
+          this.pokemons = new MatTableDataSource<Pokemon>([]);
+        },
       });
     } else {
-      this.pokemons = [];
+      this.pokemons = new MatTableDataSource<Pokemon>([]);
     }
   }
 
@@ -130,13 +131,13 @@ export class HomePageComponent implements OnInit {
     const name = event.option.value;
     this.pokemonService.getPokemonByName(name).subscribe(
       (pokemon) => {
-        if (pokemon) {
-          this.pokemons = [this.adaptFromApi(pokemon)];
-        } else {
-          this.pokemons = [];
-        }
+        const result = pokemon ? [this.adaptFromApi(pokemon)] : [];
+        this.pokemons = new MatTableDataSource(result);
+        this.pokemons.sort = this.sort;
       },
-      () => (this.pokemons = [])
+      () => {
+        this.pokemons = new MatTableDataSource<Pokemon>([]);
+      }
     );
   }
 
@@ -147,9 +148,6 @@ export class HomePageComponent implements OnInit {
       next: (response) => {
         this.allPokemonNames = response.results.map((p: PokemonListItem) =>
           p.name.toLowerCase()
-        );
-        console.log(
-          `Cargados ${this.allPokemonNames.length} nombres de pokémon`
         );
       },
       error: (err) => {
@@ -180,9 +178,6 @@ export class HomePageComponent implements OnInit {
             this.allPokemonNames = responses.flatMap((r) =>
               r.results.map((p: PokemonListItem) => p.name.toLowerCase())
             );
-            console.log(
-              `Cargados ${this.allPokemonNames.length} nombres de pokémon`
-            );
           },
           error: (err) =>
             console.error('Error loading all names in batches', err),
@@ -207,7 +202,9 @@ export class HomePageComponent implements OnInit {
 
           forkJoin(requests).subscribe({
             next: (pokemons) => {
-              this.pokemons = pokemons.map((p) => this.adaptFromApi(p));
+              const result = pokemons.map((p) => this.adaptFromApi(p));
+              this.pokemons = new MatTableDataSource(result);
+              this.pokemons.sort = this.sort;
               this.loading = false;
             },
             error: () => {
